@@ -1,0 +1,927 @@
+{
+  "scoreboards": [
+    {
+      "id": 1,
+      "title": "Taula 1",
+      "homeName": "JUGADOR LOCAL",
+      "awayName": "JUGADOR VISITANT",
+      "homeScore": 0,
+      "awayScore": 0,
+      "period": "1",
+      "clock": "00:00",
+      "status": "Preparat",
+      "locked": false,
+      "rectificationEndsAt": "",
+      "theme": "red"
+    },
+    {
+      "id": 2,
+      "title": "Taula 2",
+      "homeName": "JUGADOR LOCAL",
+      "awayName": "JUGADOR VISITANT",
+      "homeScore": 0,
+      "awayScore": 0,
+      "period": "1",
+      "clock": "00:00",
+      "status": "Preparat",
+      "locked": false,
+      "rectificationEndsAt": "",
+      "theme": "blue"
+    },
+    {
+      "id": 3,
+      "title": "Taula 3",
+      "homeName": "JUGADOR LOCAL",
+      "awayName": "JUGADOR VISITANT",
+      "homeScore": 0,
+      "awayScore": 0,
+      "period": "1",
+      "clock": "00:00",
+      "status": "Preparat",
+      "locked": false,
+      "rectificationEndsAt": "",
+      "theme": "green"
+    },
+    {
+      "id": 4,
+      "title": "Taula 4",
+      "homeName": "JUGADOR LOCAL",
+      "awayName": "JUGADOR VISITANT",
+      "homeScore": 0,
+      "awayScore": 0,
+      "period": "1",
+      "clock": "00:00",
+      "status": "Preparat",
+      "locked": false,
+      "rectificationEndsAt": "",
+      "theme": "amber"
+    },
+    {
+      "id": 5,
+      "title": "Taula 5",
+      "homeName": "JUGADOR LOCAL",
+      "awayName": "JUGADOR VISITANT",
+      "homeScore": 0,
+      "awayScore": 0,
+      "period": "1",
+      "clock": "00:00",
+      "status": "Preparat",
+      "locked": false,
+      "rectificationEndsAt": "",
+      "theme": "violet"
+    },
+    {
+      "id": 6,
+      "title": "Taula 6",
+      "homeName": "JUGADOR LOCAL",
+      "awayName": "JUGADOR VISITANT",
+      "homeScore": 0,
+      "awayScore": 0,
+      "period": "1",
+      "clock": "00:00",
+      "status": "Preparat",
+      "locked": false,
+      "rectificationEndsAt": "",
+      "theme": "cyan"
+    }
+  ],
+  "players": [
+    {
+      "seed": 1,
+      "name": "valeri"
+    },
+    {
+      "seed": 2,
+      "name": "oriol"
+    },
+    {
+      "seed": 3,
+      "name": "ivan"
+    },
+    {
+      "seed": 4,
+      "name": "txiki"
+    },
+    {
+      "seed": 5,
+      "name": "izac"
+    },
+    {
+      "seed": 6,
+      "name": "juangrits"
+    },
+    {
+      "seed": 7,
+      "name": ""
+    },
+    {
+      "seed": 8,
+      "name": ""
+    },
+    {
+      "seed": 9,
+      "name": ""
+    },
+    {
+      "seed": 10,
+      "name": ""
+    },
+    {
+      "seed": 11,
+      "name": ""
+    },
+    {
+      "seed": 12,
+      "name": ""
+    },
+    {
+      "seed": 13,
+      "name": ""
+    },
+    {
+      "seed": 14,
+      "name": ""
+    },
+    {
+      "seed": 15,
+      "name": ""
+    },
+    {
+      "seed": 16,
+      "name": ""
+    },
+    {
+      "seed": 17,
+      "name": ""
+    },
+    {
+      "seed": 18,
+      "name": ""
+    },
+    {
+      "seed": 19,
+      "name": ""
+    },
+    {
+      "seed": 20,
+      "name": ""
+    },
+    {
+      "seed": 21,
+      "name": ""
+    },
+    {
+      "seed": 22,
+      "name": ""
+    },
+    {
+      "seed": 23,
+      "name": ""
+    },
+    {
+      "seed": 24,
+      "name": ""
+    },
+    {
+      "seed": 25,
+      "name": ""
+    },
+    {
+      "seed": 26,
+      "name": ""
+    },
+    {
+      "seed": 27,
+      "name": ""
+    },
+    {
+      "seed": 28,
+      "name": ""
+    },
+    {
+      "seed": 29,
+      "name": ""
+    },
+    {
+      "seed": 30,
+      "name": ""
+    },
+    {
+      "seed": 31,
+      "name": ""
+    },
+    {
+      "seed": 32,
+      "name": ""
+    },
+    {
+      "seed": 33,
+      "name": ""
+    },
+    {
+      "seed": 34,
+      "name": ""
+    },
+    {
+      "seed": 35,
+      "name": ""
+    },
+    {
+      "seed": 36,
+      "name": ""
+    },
+    {
+      "seed": 37,
+      "name": ""
+    },
+    {
+      "seed": 38,
+      "name": ""
+    },
+    {
+      "seed": 39,
+      "name": ""
+    },
+    {
+      "seed": 40,
+      "name": ""
+    },
+    {
+      "seed": 41,
+      "name": ""
+    },
+    {
+      "seed": 42,
+      "name": ""
+    },
+    {
+      "seed": 43,
+      "name": ""
+    },
+    {
+      "seed": 44,
+      "name": ""
+    },
+    {
+      "seed": 45,
+      "name": ""
+    },
+    {
+      "seed": 46,
+      "name": ""
+    },
+    {
+      "seed": 47,
+      "name": ""
+    },
+    {
+      "seed": 48,
+      "name": ""
+    },
+    {
+      "seed": 49,
+      "name": ""
+    },
+    {
+      "seed": 50,
+      "name": ""
+    },
+    {
+      "seed": 51,
+      "name": ""
+    },
+    {
+      "seed": 52,
+      "name": ""
+    },
+    {
+      "seed": 53,
+      "name": ""
+    },
+    {
+      "seed": 54,
+      "name": ""
+    },
+    {
+      "seed": 55,
+      "name": ""
+    },
+    {
+      "seed": 56,
+      "name": ""
+    },
+    {
+      "seed": 57,
+      "name": ""
+    },
+    {
+      "seed": 58,
+      "name": ""
+    },
+    {
+      "seed": 59,
+      "name": ""
+    },
+    {
+      "seed": 60,
+      "name": ""
+    },
+    {
+      "seed": 61,
+      "name": ""
+    },
+    {
+      "seed": 62,
+      "name": ""
+    },
+    {
+      "seed": 63,
+      "name": ""
+    },
+    {
+      "seed": 64,
+      "name": ""
+    }
+  ],
+  "bracketManual": {
+    "r64": [
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      }
+    ],
+    "r32": [
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      }
+    ],
+    "r16": [
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      }
+    ],
+    "qf": [
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      }
+    ],
+    "sf": [
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      },
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      }
+    ],
+    "final": [
+      {
+        "top": "",
+        "bottom": "",
+        "table": "",
+        "winner": "",
+        "score": "",
+        "topManual": false,
+        "bottomManual": false
+      }
+    ]
+  }
+}

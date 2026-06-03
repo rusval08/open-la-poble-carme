@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: open-la-pobla-marcadors
+    runtime: docker
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATA_DIR
+        value: /data
+    disk:
+      name: campionat-data
+      mountPath: /data
+      sizeGB: 1

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quadrant en directe - Administrador</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/logo.js" defer></script>
+  </head>
+  <body class="bracket-body">
+    <header class="results-header">
+      <div>
+        <p class="eyebrow">Administrador</p>
+        <h1>Quadrant en directe</h1>
+      </div>
+      <div class="bracket-legend">
+        <span></span>
+        <strong>Cami cap a la final</strong>
+      </div>
+      <div class="players-actions">
+        <a class="home-link" href="/resultats">Taules en directe</a>
+        <a class="home-link" href="/quadrant-control">Modificar quadrant</a>
+        <a class="home-link" href="/admin">Inici</a>
+      </div>
+    </header>
+
+    <main class="bracket-layout">
+      <section class="bracket-board" id="bracketCurrent"></section>
+
+      <section>
+        <h2>Estat del quadrant</h2>
+        <div class="bracket-next" id="bracketNext"></div>
+      </section>
+    </main>
+
+    <script src="/quadrant.js"></script>
+  </body>
+</html>

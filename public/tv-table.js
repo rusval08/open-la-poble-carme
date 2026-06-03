@@ -1,0 +1,51 @@
+const tvTable = document.querySelector("#tvTable");
+let tvState = { scoreboards: [] };
+
+function boardOne() {
+  return tvState.scoreboards.find((item) => item.id === 1);
+}
+
+function renderTvTable() {
+  const board = boardOne();
+  if (!board) return;
+
+  document.title = `TV Table - ${board.title}`;
+  tvTable.className = `tv-table theme-${board.theme}`;
+  tvTable.innerHTML = `
+    <section class="tv-table-header">
+      <div>
+        <span>Open la Pobla</span>
+        <strong>${board.title}</strong>
+      </div>
+    </section>
+
+    <section class="tv-table-score">
+      <article>
+        <h1>${board.homeName}</h1>
+        <div>${board.homeScore}</div>
+      </article>
+
+      <aside>
+        <span>VS</span>
+      </aside>
+
+      <article>
+        <h1>${board.awayName}</h1>
+        <div>${board.awayScore}</div>
+      </article>
+    </section>
+  `;
+}
+
+async function initTvTable() {
+  tvState = await fetch("/api/state").then((response) => response.json());
+  renderTvTable();
+
+  const events = new EventSource("/api/events");
+  events.onmessage = (event) => {
+    tvState = JSON.parse(event.data);
+    renderTvTable();
+  };
+}
+
+initTvTable();

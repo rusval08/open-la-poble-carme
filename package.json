@@ -1,0 +1,14 @@
+{
+  "name": "open-la-pobla-marcadors",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Control de taules, resultats en directe i quadrant de l'Open la Pobla.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check public/app.js && node --check public/quadrant-control.js && node --check public/quadrant.js && node --check public/resultats.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
