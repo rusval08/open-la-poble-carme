@@ -32,3 +32,38 @@ Taules Quadrant TV table en directe<!doctype html>
     <script src="/directe.js"></script>
   </body>
 </html>
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Directe Open la Pobla</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/logo.js" defer></script>
+  </head>
+  <body class="live-body">
+    <header class="live-header">
+      <div>
+        <p class="eyebrow">En directe</p>
+        <h1>Open la Pobla</h1>
+      </div>
+      <nav class="live-tabs" aria-label="Vistes del directe">
+        <button class="active" data-view="tables" type="button">Taules</button>
+        <button data-view="bracket" type="button">Quadrant</button>
+        <a class="home-link" href="https://www.youtube.com/@carme8pool810/streams" target="_blank" rel="noreferrer">TV table en directe</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="live-view active" id="liveTables">
+        <div class="results-grid compact" id="liveTablesGrid"></div>
+      </section>
+
+      <section class="live-view" id="liveBracket">
+        <div class="mobile-bracket" id="liveBracketGrid"></div>
+      </section>
+    </main>
+
+    <script src="/directe.js"></script>
+  </body>
+</html>
