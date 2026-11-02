@@ -1,0 +1,25 @@
+(function(){
+ 'use strict';
+ let cached=null,loadedAt=0,inflight=null;
+ async function configuration(){if(cached&&Date.now()-loadedAt<30000)return cached;if(inflight)return inflight;inflight=(async()=>{const response=await fetch('/api/live/cloud-config',{cache:'no-store'});if(response.status===404)return{tables:[]};if(!response.ok)throw Error('No es pot comprovar la configuració de vídeo');cached=await response.json();loadedAt=Date.now();return cached})().finally(()=>inflight=null);return inflight}
+ class CloudConnection{
+  constructor(role,table,stream,onStream,onStatus,playbackUrl){Object.assign(this,{role,table,stream,onStream,onStatus,playbackUrl,closed:false,abort:new AbortController(),source:'cloudflare'})}
+  async start(){
+   let url=this.playbackUrl;
+   if(this.role==='publisher'){const response=await fetch('/api/live/cloud-publish?table='+this.table,{cache:'no-store',signal:this.abort.signal}),data=await response.json();if(!response.ok)throw Error(data.error||'No es pot preparar l’emissió');url=data.publishUrl}
+   if(this.closed)throw Error('Connexió cancel·lada');this.onStatus?.(this.role==='publisher'?'Connectant amb el servei de vídeo…':'Connectant amb el directe…');
+   const pc=this.pc=new RTCPeerConnection({bundlePolicy:'max-bundle'});
+   if(this.role==='publisher'){for(const track of this.stream.getVideoTracks())pc.addTransceiver(track,{direction:'sendonly'})}else{pc.addTransceiver('video',{direction:'recvonly'});const media=new MediaStream();pc.ontrack=event=>{media.addTrack(event.track);if(!this.closed)this.onStream?.(media)}}
+   pc.onconnectionstatechange=()=>{if(this.closed)return;if(pc.connectionState==='connected')this.onStatus?.(this.role==='publisher'?'Emetent amb Cloudflare · distribució al públic activa':'Vídeo en directe · Cloudflare');else if(pc.connectionState==='failed'){this.onStatus?.('S’ha interromput el vídeo. Torna a iniciar l’emissió o recarrega TV Table.');this.close()}};
+   try{await pc.setLocalDescription(await pc.createOffer());await new Promise(resolve=>{if(pc.iceGatheringState==='complete'){resolve();return}const done=()=>{clearTimeout(timer);pc.removeEventListener('icegatheringstatechange',change);resolve()},change=()=>{if(pc.iceGatheringState==='complete')done()},timer=setTimeout(done,5000);pc.addEventListener('icegatheringstatechange',change);this.abort.signal.addEventListener('abort',done,{once:true})});if(this.closed)throw Error('Connexió cancel·lada');
+    const response=await fetch(url,{method:'POST',headers:{'Content-Type':'application/sdp'},body:pc.localDescription.sdp,signal:this.abort.signal});
+    if(!response.ok)throw Error(this.role==='publisher'?'Cloudflare no ha acceptat l’emissió. Revisa l’activació de Stream i les claus de la taula.':'El directe encara no està disponible. Tornarem a connectar.');
+    const location=response.headers.get('Location');if(location){const session=new URL(location,url);if(session.origin===new URL(url).origin)this.sessionUrl=session.href}
+    await pc.setRemoteDescription({type:'answer',sdp:await response.text()});return this;
+   }catch(error){this.close();throw error}
+  }
+  close(){if(this.closed)return;this.closed=true;this.abort.abort();if(this.pc){this.pc.onconnectionstatechange=null;this.pc.ontrack=null;this.pc.close()}if(this.sessionUrl)fetch(this.sessionUrl,{method:'DELETE',keepalive:true}).catch(()=>{});this.onClose?.()}
+ }
+ window.CloudStream={configuration,CloudConnection,async connection(role,table,stream,onStream,onStatus){const settings=await configuration(),config=settings.tables.find(t=>t.table===table);return config?.configured?new CloudConnection(role,table,stream,onStream,onStatus,config.playbackUrl):null}};
+ if(document.body.classList.contains('admin-body'))configuration().then(config=>{for(const table of config.tables){if(!table.configured)continue;const box=document.querySelector('.production-camera[data-table="'+table.table+'"] .live-broadcast-controls');if(!box)continue;box.dataset.provider='cloudflare';const note=box.querySelector('.production-note');if(note)note.textContent='Cloudflare Stream configurat: el servei distribueix el vídeo al públic, sense el límit local de 6 espectadors. Mantén aquest panell obert. El consum es factura segons el pla de Cloudflare.';const status=box.querySelector('[role=status]');if(status)status.textContent='Cloudflare preparat · emissió aturada'}}).catch(()=>{});
+})();
