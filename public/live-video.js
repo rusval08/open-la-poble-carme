@@ -1,0 +1,38 @@
+(function(){
+ 'use strict';
+ async function post(path,body,signal){const response=await fetch('/api/live/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal});const value=await response.json();if(!response.ok)throw Object.assign(Error(value.error||'No es pot connectar'),{status:response.status});return value}
+ class Connection{
+  constructor(role,table,stream,onStream,onStatus){Object.assign(this,{role,table,stream,onStream,onStatus,peers:new Map(),closed:false,abort:new AbortController()})}
+  async start(){this.session=await post('session',{role:this.role,table:this.table},this.abort.signal);this.onStatus?.('Emissió preparada · esperant espectadors');this.poll();return this}
+  async signal(to,type,payload){if(!this.closed)await post('signal',{...this.session,to,type,payload},this.abort.signal)}
+  async peer(id){if(this.peers.has(id))return this.peers.get(id);const pc=new RTCPeerConnection(this.session.configuration),entry={pc,candidates:[]};this.peers.set(id,entry);if(this.stream)for(const track of this.stream.getVideoTracks())pc.addTrack(track,this.stream);
+   pc.onicecandidate=event=>{if(event.candidate)this.signal(id,'candidate',event.candidate.toJSON()).catch(()=>{})};
+   pc.ontrack=event=>this.onStream?.(event.streams[0]||new MediaStream([event.track]));
+   pc.onconnectionstatechange=()=>{if(pc.connectionState==='connected')this.report();else if(['failed','closed'].includes(pc.connectionState)){this.drop(id);this.onStatus?.('Connexió interrompuda. Reconnectant…');if(this.role==='viewer')this.close()}};
+   if(this.role==='publisher'){const offer=await pc.createOffer();await pc.setLocalDescription(offer);await this.signal(id,'offer',pc.localDescription.toJSON())}return entry;
+  }
+  report(){const count=[...this.peers.values()].filter(p=>p.pc.connectionState==='connected').length;this.onStatus?.(this.role==='publisher'?'Emetent · '+count+' espectadors connectats':'Vídeo USB en directe · connexió establerta')}
+  drop(id){const p=this.peers.get(id);this.peers.delete(id);if(p){p.pc.onconnectionstatechange=null;p.pc.close()}}
+  async message(m){if(m.type==='offline'){this.close();return}if(m.type==='leave'){this.drop(m.from);this.report();return}if(m.type==='join'){await this.peer(m.from);return}const p=await this.peer(m.from);if(m.type==='candidate'){if(p.pc.remoteDescription)await p.pc.addIceCandidate(m.payload);else p.candidates.push(m.payload);return}await p.pc.setRemoteDescription(m.payload);for(const candidate of p.candidates.splice(0))await p.pc.addIceCandidate(candidate);if(m.type==='offer'){await p.pc.setLocalDescription(await p.pc.createAnswer());await this.signal(m.from,'answer',p.pc.localDescription.toJSON())}}
+  async poll(){while(!this.closed){try{const data=await post('poll',this.session,this.abort.signal);for(const message of data.messages)await this.message(message);if(!this.closed)await new Promise(resolve=>setTimeout(resolve,1000))}catch(error){if(this.closed)break;this.onStatus?.(error.status===401?'Emissió aturada o sessió caducada':error.message);this.close();break}}}
+  close(){if(this.closed)return;this.closed=true;this.abort.abort();for(const id of this.peers.keys())this.drop(id);if(this.session)fetch('/api/live/leave',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(this.session),keepalive:true}).catch(()=>{});this.onClose?.()}
+ }
+ window.ChampionshipLive={Connection};
+ if(!window.RTCPeerConnection)return;
+ const publishers=new Map();
+ if(document.body.classList.contains('admin-body')){
+  for(const table of[1,2]){const card=document.querySelector('.production-camera[data-table="'+table+'"]');if(!card)continue;const box=document.createElement('div');box.className='live-broadcast-controls';box.innerHTML='<button type="button" class="live-publish">Emetre USB al públic</button><button type="button" class="live-stop" hidden>Aturar emissió</button><p role="status" class="live-broadcast-status">Emissió aturada</p><p class="production-note">Mantén aquest panell obert. Connexió directa per a un màxim de 6 espectadors per taula. Algunes xarxes requereixen un servidor de retransmissió.</p>';card.querySelector('.production-preview').after(box);const start=box.querySelector('.live-publish'),stop=box.querySelector('.live-stop'),status=box.querySelector('[role=status]');
+   start.addEventListener('click',async()=>{const stream=window.AdminCameraPreview?.stream(table);if(!stream?.getVideoTracks().some(t=>t.readyState==='live')){status.textContent='Primer connecta o previsualitza la càmera USB d’aquesta taula.';return}start.disabled=true;let connection;try{connection=new Connection('publisher',table,stream,null,text=>status.textContent=text);await connection.start();publishers.set(table,connection);stop.hidden=false;start.hidden=true;connection.onClose=()=>{publishers.delete(table);start.hidden=false;stop.hidden=true;status.textContent='Emissió aturada'};stream.getVideoTracks()[0].addEventListener('ended',()=>connection.close(),{once:true});}catch(error){connection?.close();status.textContent=error.message}finally{start.disabled=false}});
+   stop.addEventListener('click',()=>publishers.get(table)?.close());
+  }
+  window.addEventListener('cpool-preview-stopped',event=>publishers.get(event.detail.table)?.close());
+  window.addEventListener('pagehide',()=>{for(const p of publishers.values())p.close()});
+ }else if(document.body.classList.contains('tv-directe-body')){
+  const remote=new Map(),connections=new Map(),pending=new Set(),original=window.LocalTVCamera;let profiles={},leaving=false;
+  function announce(){window.dispatchEvent(new Event('tv-local-camera-change'))}
+  window.LocalTVCamera={setPicture(production){profiles=production||{};original?.setPicture(production);for(const[id,video]of remote)window.USBPicture?.style(video,profiles[id]?.picture||{})},active:id=>remote.has(id)||original?.active(id),render(camera){const video=remote.get(camera.id);if(!video)return original?.render(camera)||false;if(camera.container.firstElementChild!==video)camera.container.replaceChildren(video);camera.loadedId='remote:'+camera.id;video.play().catch(()=>{});return true}};
+  window.RemoteTVCamera={active:id=>remote.has(id)};
+  async function connect(table){if(leaving||pending.has(table)||connections.has(table)||original?.active(table))return;const card=document.querySelector('#taula-'+table);if(!card||card.hidden)return;pending.add(table);let connection;try{connection=new Connection('viewer',table,null,stream=>{if(leaving)return;const video=document.createElement('video');video.autoplay=true;video.playsInline=true;video.muted=true;video.className='tv-usb-video';video.srcObject=stream;window.USBPicture?.style(video,profiles[table]?.picture||{});remote.set(table,video);announce()},text=>{const el=document.querySelector('#tvLiveStatus'+table);if(el&&!remote.has(table)&&!original?.active(table))el.textContent=text});await connection.start();if(leaving){connection.close();return}connections.set(table,connection);connection.onClose=()=>{connections.delete(table);remote.delete(table);announce()};connection.timer=setTimeout(()=>{if(!remote.has(table))connection.close()},20000)}catch(error){connection?.close();if(error.status===429){const el=document.querySelector('#tvLiveStatus'+table);if(el)el.textContent=error.message}}finally{pending.delete(table)}}
+  function sync(){for(const table of[1,2])connect(table)}setInterval(sync,8000);sync();window.addEventListener('online',sync);window.addEventListener('pagehide',()=>{leaving=true;for(const p of connections.values()){clearTimeout(p.timer);p.close()}});window.addEventListener('pageshow',()=>{leaving=false;sync()});
+ }
+})();
