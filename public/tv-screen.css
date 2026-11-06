@@ -4,3 +4,5 @@
 
 .tv-immersive .tv-screen-tools>*{pointer-events:none}.tv-immersive.tv-controls-visible .tv-screen-tools>*,.tv-immersive[data-tv-keyboard=true] .tv-screen-tools:focus-within>*{pointer-events:auto}
 .tv-immersive.tv-controls-visible .cpool-dvr-player .cpool-player-controls{opacity:1;pointer-events:auto}
+
+@media(orientation:landscape){.tv-directe-body .global-logo{display:none!important}}
