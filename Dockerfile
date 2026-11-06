@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:24-alpine
 
 WORKDIR /app
 
@@ -9,6 +9,9 @@ COPY public ./public
 ENV NODE_ENV=production
 ENV PORT=4173
 ENV DATA_DIR=/data
+
+RUN mkdir -p /data && chown -R node:node /app /data
+USER node
 
 EXPOSE 4173
 

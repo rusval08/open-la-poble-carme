@@ -1,0 +1,9 @@
+.git
+node_modules
+.env
+.env.*
+*.log
+backups
+production-images
+*.dpapi
+pairing.txt

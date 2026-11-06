@@ -9,6 +9,6 @@
     "check": "node --check server.js && node --check public/app.js && node --check public/quadrant-control.js && node --check public/quadrant.js && node --check public/resultats.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   }
 }
