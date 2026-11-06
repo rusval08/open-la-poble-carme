@@ -1,5 +1,7 @@
 FROM node:24-alpine
 
+RUN apk add --no-cache su-exec
+
 WORKDIR /app
 
 COPY package.json ./
@@ -11,7 +13,9 @@ ENV PORT=4173
 ENV DATA_DIR=/data
 
 RUN mkdir -p /data && chown -R node:node /app /data
-USER node
+COPY --chmod=755 docker-entrypoint.sh /usr/local/bin/cpool-entrypoint
+USER root
+ENTRYPOINT ["/usr/local/bin/cpool-entrypoint"]
 
 EXPOSE 4173
 
