@@ -310,7 +310,7 @@ function sendUnauthorized(res) {
   sendJson(res, 401, { error: "Cal iniciar sessió com administrador" });
 }
 function isAdminProtectedPage(urlPath) {
-  return ["/admin.html", "/quadrant-admin.html", "/jugadors.html"].includes(
+  return ["/admin.html", "/quadrant-admin.html", "/jugadors.html", "/gravacions.html"].includes(
     urlPath,
   );
 }
@@ -1292,7 +1292,7 @@ function serveStatic(req, res) {
     );
     return;
   }
-  if(['/live-relay-server.js','/server-guard.js'].includes(urlPath)){sendJson(res,404,{error:'No trobat'});return}
+  if(['/live-relay-server.js','/server-guard.js','/recordings-server.js'].includes(urlPath)){sendJson(res,404,{error:'No trobat'});return}
   const filePath = path.resolve(PUBLIC_DIR,'.'+urlPath);
   if (!filePath.startsWith(PUBLIC_DIR+path.sep)) {
     res.writeHead(403);
@@ -1320,6 +1320,7 @@ const liveRoute = require("./public/live-relay-server.js")({
   sendJson,
   production: () => state.settings.production,
 });
+const recordingsRoute=require('./public/recordings-server.js')({isAdmin,sendJson,readBody});
 const server = http.createServer(async (req, res) => {
  try{
  const blocked=guard.begin(req,res);if(blocked){sendJson(res,blocked.status,{error:blocked.error});return}
@@ -1329,6 +1330,7 @@ const server = http.createServer(async (req, res) => {
     sendJson(res, 200, publicState());
     return;
   }
+  if (await recordingsRoute(req,res,url)) return;
   if (await liveRoute(req, res, url)) return;
   if (await championshipRoute(req, res, url)) return;
   if (req.method === "GET" && url.pathname === "/api/health") {
