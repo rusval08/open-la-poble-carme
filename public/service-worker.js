@@ -1,7 +1,7 @@
-const CACHE_NAME='cpool-public-app-v28-resilience';
+const CACHE_NAME='cpool-public-app-v29-recordings';
 const PAGES=new Set(['/resultats','/resultats.html','/quadrant','/quadrant.html','/estadistiques','/estadistiques.html','/historial.html','/enfrontaments.html','/pantalla.html','/tv-directe.html','/tv-table','/tv-table.html','/instal-lar.html','/offline.html']);
 const CORE=['/offline.html','/resultats','/styles.css','/resultats-theme.css','/resultats.js','/connection.js?v=20261106-1','/connection.css?v=20261106-1','/logo.js','/pwa.js','/cpool-logo.png','/manifest.webmanifest'];
-const PRIVATE=new Set(['/admin.js','/app.js','/server-guard.js','/live-relay-server.js','/championship-backup.js','/production-admin.js','/operations-admin.js','/quadrant-control.js','/jugadors.js']);
+const PRIVATE=new Set(['/admin.js','/app.js','/recordings-admin.js','/recordings-server.js','/server-guard.js','/live-relay-server.js','/championship-backup.js','/production-admin.js','/operations-admin.js','/quadrant-control.js','/jugadors.js']);
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE_NAME);await Promise.allSettled(CORE.map(async url=>{const r=await fetch(url,{cache:'reload'});if(r.ok&&r.headers.get('X-CPool-App')==='1')await cache.put(url,r)}));await self.skipWaiting()})()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if(key.startsWith('cpool-public-app-')&&key!==CACHE_NAME)await caches.delete(key);await self.clients.claim()})()));
 self.addEventListener('fetch',event=>{
