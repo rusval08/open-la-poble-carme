@@ -1,1 +1,41 @@
-const tvTable = document.querySelector("#tvTable"); let tvState = { settings: { tournamentName: "Open la Pobla" }, scoreboards: [] }; function boardOne() { return tvState.scoreboards.find((item) => item.id === 1); } function renderTvTable() { const board = boardOne(); if (!board) return; const tournamentName = tvState.settings?.tournamentName || "Open la Pobla"; document.title = `TV Table - ${board.title}`; tvTable.className = `tv-table theme-${board.theme}`; tvTable.innerHTML = ` <section class="tv-table-header"> <div> <span>${tournamentName}</span> <strong>${board.title}</strong> </div> </section> <section class="tv-table-score"> <article> <h1>${board.homeName}</h1> <div>${board.homeScore}</div> </article> <aside> <span>VS</span> </aside> <article> <h1>${board.awayName}</h1> <div>${board.awayScore}</div> </article> </section> `; } async function initTvTable() { tvState = await fetch("/api/state").then((response) => response.json()); renderTvTable(); const events = new EventSource("/api/events"); events.onmessage = (event) => { tvState = JSON.parse(event.data); renderTvTable(); }; } initTvTable();
+window.CPoolEscape =
+  window.CPoolEscape ||
+  function (v) {
+    return String(v ?? "").replace(
+      /[&<>"']/g,
+      (c) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        })[c],
+    );
+  };
+const tvTable = document.querySelector("#tvTable");
+let tvState = {
+  settings: { tournamentName: "Open la Pobla" },
+  scoreboards: [],
+};
+function boardOne() {
+  return tvState.scoreboards.find((item) => item.id === 1);
+}
+function renderTvTable() {
+  const board = boardOne();
+  if (!board) return;
+  const tournamentName = tvState.settings?.tournamentName || "Open la Pobla";
+  document.title = `TV Table - ${window.CPoolEscape(board.title)}`;
+  tvTable.className = `tv-table theme-${window.CPoolEscape(board.theme)}`;
+  tvTable.innerHTML = ` <section class="tv-table-header"> <div> <span>${tournamentName}</span> <strong>${window.CPoolEscape(board.title)}</strong> </div> </section> <section class="tv-table-score"> <article> <h1>${window.CPoolEscape(board.homeName)}</h1> <div>${board.homeScore}</div> </article> <aside> <span>VS</span> </aside> <article> <h1>${window.CPoolEscape(board.awayName)}</h1> <div>${board.awayScore}</div> </article> </section> `;
+}
+async function initTvTable() {
+  tvState = await fetch("/api/state").then((response) => response.json());
+  renderTvTable();
+  const events = new EventSource("/api/events");
+  events.onmessage = (event) => {
+    tvState = JSON.parse(event.data);
+    renderTvTable();
+  };
+}
+initTvTable();
