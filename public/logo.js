@@ -5,3 +5,9 @@ function setupMobileAppearance(){
  const meta=document.querySelector('meta[name=viewport]');if(meta&&!meta.content.includes('viewport-fit'))meta.content+=', viewport-fit=cover';
 }
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',setupMobileAppearance)}else{setupMobileAppearance()}
+
+function addHeadingLogo(){
+ if(!document.querySelector('#cpoolHeadingLogoStyle')){const style=document.createElement('style');style.id='cpoolHeadingLogoStyle';style.textContent='.cpool-heading-line{display:flex;align-items:center;gap:16px;min-width:0;max-width:100%}.cpool-heading-line>h1{min-width:0;margin:0}.cpool-heading-logo{display:block;flex:0 0 auto;width:72px;height:72px;object-fit:contain}@media(max-width:760px){.cpool-heading-line{gap:10px}.cpool-heading-logo{width:46px;height:46px}.cpool-heading-line>h1{flex:0 1 auto}}';document.head.appendChild(style)}
+ document.querySelectorAll('.results-header h1[data-tournament-name],.admin-header h1[data-tournament-name],.topbar h1[data-tournament-name]').forEach(title=>{if(title.parentElement.classList.contains('cpool-heading-line'))return;const row=document.createElement('div');row.className='cpool-heading-line';title.before(row);row.append(title);const logo=document.createElement('img');logo.className='cpool-heading-logo';logo.src='/cpool-logo.png';logo.alt='CPool';logo.width=72;logo.height=72;logo.decoding='async';row.append(logo)})
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',addHeadingLogo)}else{addHeadingLogo()}
