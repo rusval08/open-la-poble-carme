@@ -1,4 +1,4 @@
-const CACHE_NAME='cpool-public-app-v32-heading-logo';
+const CACHE_NAME='cpool-public-app-v33-visible-controls';
 const PAGES=new Set(['/resultats','/resultats.html','/quadrant','/quadrant.html','/estadistiques','/estadistiques.html','/historial.html','/enfrontaments.html','/pantalla.html','/tv-directe.html','/tv-table','/tv-table.html','/instal-lar.html','/offline.html']);
 const CORE=['/mobile.css?v=20261106-1','/offline.html','/resultats','/styles.css','/resultats-theme.css','/resultats.js','/connection.js?v=20261106-1','/connection.css?v=20261106-1','/logo.js','/pwa.js','/cpool-logo.png','/manifest.webmanifest'];
 const PRIVATE=new Set(['/admin.js','/app.js','/server-guard.js','/live-relay-server.js','/championship-backup.js','/production-admin.js','/operations-admin.js','/quadrant-control.js','/jugadors.js']);
@@ -10,3 +10,4 @@ self.addEventListener('fetch',event=>{
  if(!navigation&&!/\.(?:js|css|png|jpe?g|webp|svg|webmanifest)$/.test(u.pathname))return;
  event.respondWith((async()=>{const cache=await caches.open(CACHE_NAME),controller=new AbortController(),timer=setTimeout(()=>controller.abort(),6000);try{const response=await fetch(req,{signal:controller.signal,cache:'no-cache'});if(response.ok&&response.headers.get('X-CPool-App')==='1'){await cache.put(req,response.clone());return response}if(response.status<500)return response;throw Error('Servidor no disponible')}catch{const cached=await cache.match(req,{ignoreSearch:navigation});if(cached)return cached;if(navigation)return await cache.match('/offline.html')||new Response('Sense connexió. Torna-ho a provar.',{status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}});return new Response('',{status:503})}finally{clearTimeout(timer)}})());
 });
+
