@@ -16,16 +16,16 @@
   const home=panes.get('home'),tv=panes.get('tv'),event=panes.get('event'),settings=panes.get('settings');
   const intro=document.createElement('div');intro.className='admin-workspace-heading';intro.innerHTML='<div><h2>Accés ràpid</h2><p>Les accions principals del campionat, a un clic.</p></div>';home.append(intro);
   const shortcuts=document.createElement('nav');shortcuts.className='admin-shortcuts';shortcuts.setAttribute('aria-label','Accions habituals');
-  shortcuts.innerHTML='<a class="admin-shortcut" href="/control"><strong>Puntuar taules</strong><span>Marcador i següent partit</span></a><a class="admin-shortcut" href="/quadrant-control"><strong>Quadrant</strong><span>Enfrontaments i passos directes</span></a><a class="admin-shortcut" href="/jugadors"><strong>Jugadors</strong><span>Afegir i revisar els noms</span></a><a class="admin-shortcut" href="#championshipBackups"><strong>Còpia de seguretat</strong><span>Guardar o recuperar el campionat</span></a>';home.append(shortcuts,gate);
+  shortcuts.innerHTML='<a class="admin-shortcut" href="/control"><strong>Puntuar taules</strong><span>Marcador i següent partit</span></a><a class="admin-shortcut" href="/quadrant-control"><strong>Quadrant</strong><span>Enfrontaments i passos directes</span></a><a class="admin-shortcut" href="/jugadors"><strong>Jugadors</strong><span>Afegir i revisar els noms</span></a><a class="admin-shortcut" href="#championshipBackups"><strong>Còpia de seguretat</strong><span>Guardar o recuperar el campionat</span></a>';home.append(shortcuts,gate);const readiness=document.querySelector('.operations-overview');if(readiness)home.append(readiness);
   const tvIntro=document.createElement('div');tvIntro.className='admin-workspace-heading';tvIntro.innerHTML='<div><h2>TV i càmeres</h2><p>Canviar d’apartat no atura les càmeres ni l’emissió.</p></div><nav class="admin-tv-shortcuts" aria-label="Accessos de vídeo"><a href="/tv-directe.html?preview=admin" target="_blank" rel="noopener">Previsualització privada ↗</a><a href="/gravacions.html">Gravacions i descàrregues</a><a href="#admin-home">Obrir o tancar el públic</a></nav>';tv.append(tvIntro);
   const eventIntro=document.createElement('div');eventIntro.className='admin-workspace-heading';eventIntro.innerHTML='<div><h2>Campionat i pantalles</h2><p>Control dels partits i accessos a les pantalles públiques.</p></div>';event.append(eventIntro);
   function group(parent,label,node,open=false){if(!node)return;const details=document.createElement('details');details.className='admin-workspace-details';details.open=open;const summary=document.createElement('summary');summary.textContent=label;details.append(summary,node);parent.append(details);return details}
   group(settings,'Còpies de seguretat',backups,true);
   const advanced=document.querySelector('.operations-advanced');if(advanced){advanced.open=true;group(settings,'Patrocinadors i presentació',advanced)}
   group(settings,'Emissor amb retrocés',document.querySelector('.dvr-admin'));
-  group(home,'Comprovacions i estat del sistema',operations);
+  const readinessDetails=group(home,'Comprovacions i estat del sistema',operations);readinessDetails.id='systemReadiness';
   for(const node of originals){
-   if(node===gate||node===operations)continue;
+   if(node===gate||node===operations||node===readiness)continue;
    if(node.contains(production)){tv.append(node);continue}
    const title=node.querySelector('h2')?.textContent.trim();
    if(title==='Nom del campionat'){group(settings,'Nom del campionat',node);continue}
