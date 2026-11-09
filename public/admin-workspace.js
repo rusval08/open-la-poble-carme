@@ -23,7 +23,7 @@
   group(settings,'Còpies de seguretat',backups,true);
   const advanced=document.querySelector('.operations-advanced');if(advanced){advanced.open=true;group(settings,'Patrocinadors i presentació',advanced)}
   group(settings,'Emissor amb retrocés',document.querySelector('.dvr-admin'));
-  const readinessDetails=group(home,'Comprovacions i estat del sistema',operations);readinessDetails.id='systemReadiness';
+  const readinessDetails=group(home,'Comprovacions i estat del sistema',operations);operations.id='systemReadiness';
   for(const node of originals){
    if(node===gate||node===operations||node===readiness)continue;
    if(node.contains(production)){tv.append(node);continue}
@@ -46,3 +46,4 @@
  }
  if(!initialize()){observer=new MutationObserver(()=>initialize());observer.observe(document.body,{childList:true,subtree:true});setTimeout(()=>observer.disconnect(),15000)}
 })();
+
