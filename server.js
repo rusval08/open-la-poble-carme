@@ -1207,12 +1207,7 @@ function finishTableMatch(board, previousHomeScore, previousAwayScore) {
   board.locked = true;
   board.status = "Pendent de rectificar";
   board.rectificationEndsAt = String(Date.now() + RECTIFICATION_MS);
-  const timer = setTimeout(() => {
-    pendingFinishTimers.delete(board.id);
-    completeTableMatch(board, previousHomeScore, previousAwayScore);
-    broadcast();
-  }, RECTIFICATION_MS);
-  pendingFinishTimers.set(board.id, timer);
+  scheduleTableFinish(board.id, previousHomeScore, previousAwayScore, RECTIFICATION_MS);
 }
 function completeTableMatch(board, previousHomeScore, previousAwayScore) {
   board.rectificationEndsAt = "";
@@ -1249,23 +1244,35 @@ function completeTableMatch(board, previousHomeScore, previousAwayScore) {
   board.rectificationEndsAt = "";
   saveData();
 }
+function scheduleTableFinish(boardId, previousHomeScore, previousAwayScore, delay) {
+  clearPendingFinish(boardId);
+  const timer = setTimeout(() => {
+    pendingFinishTimers.delete(boardId);
+    const board = state.scoreboards.find(item => item.id === boardId);
+    if (!board?.locked || !board.rectificationEndsAt) return;
+    try {
+      completeTableMatch(board, previousHomeScore, previousAwayScore);
+      broadcast();
+    } catch (error) {
+      console.error('Finalització pendent: no s’ha pogut guardar; es reintentarà.');
+      // saveData has restored the last saved state; never keep the stale board object.
+      const pending = state.scoreboards.find(item => item.id === boardId);
+      if (pending?.locked && pending.rectificationEndsAt) {
+        scheduleTableFinish(boardId, previousHomeScore, previousAwayScore, 5000);
+      }
+      broadcast();
+    }
+  }, Math.max(0, delay));
+  pendingFinishTimers.set(boardId, timer);
+}
 function restorePendingFinishes() {
   for (const board of state.scoreboards) {
     const endsAt = Number(board.rectificationEndsAt || 0);
     if (!board.locked || !endsAt) continue;
-    const remaining = endsAt - Date.now();
-    if (remaining <= 0) {
-      completeTableMatch(board, 0, 0);
-      continue;
-    }
-    const timer = setTimeout(() => {
-      pendingFinishTimers.delete(board.id);
-      completeTableMatch(board, 0, 0);
-      broadcast();
-    }, remaining);
-    pendingFinishTimers.set(board.id, timer);
+    scheduleTableFinish(board.id, 0, 0, Math.max(0, endsAt - Date.now()));
   }
 }
+
 function serveStatic(req, res) {
   let urlPath;try{urlPath=decodeURIComponent(new URL(req.url,'http://localhost').pathname)}catch{sendJson(res,400,{error:'Adreça no vàlida'});return}
   if (urlPath === "/" || urlPath === "/admin") urlPath = "/admin.html";
