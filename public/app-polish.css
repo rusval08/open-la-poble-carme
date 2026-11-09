@@ -168,3 +168,13 @@
  .admin-workspace-pane .admin-live-summary article{padding:12px 8px}
  .admin-workspace-pane .admin-live-summary strong{font-size:23px}
 }
+
+/* Compact controls, with a 44px touch target. */
+.cpool-public-standard .professional-toolbar>a,.cpool-public-standard .professional-toolbar>button{font-size:13px!important;padding-inline:9px!important;gap:6px!important;letter-spacing:0!important}
+.professional-toolbar-icon{width:15px!important;height:15px!important;flex-basis:15px!important}
+.cpool-public-standard .results-motion-tools button,.cpool-public-standard .results-large-link,.cpool-public-standard .results-panel-button{font-size:13px!important;padding:6px 10px!important;box-sizing:border-box;min-height:44px}
+.admin-shortcut{min-height:76px;padding:12px;gap:4px;align-content:center;box-sizing:border-box}.admin-shortcut strong{font-size:14px}.admin-shortcut span{font-size:11px}
+.admin-workspace-pane .production-action{min-height:52px;padding:8px!important;font-size:12px!important}
+.admin-workspace-nav button{min-height:44px;padding:8px 12px;font-size:13px}
+.admin-workspace-pane .broadcast-gate-panel button,.admin-workspace-pane .broadcast-gate-panel .broadcast-preview-link{min-height:44px;padding:7px 11px;font-size:13px;box-sizing:border-box}
+@media(max-width:760px){.admin-shortcut{min-height:72px;padding:10px}.admin-workspace-nav button{font-size:12px;padding-inline:9px}.cpool-public-standard .professional-toolbar{gap:5px!important}}
