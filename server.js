@@ -1299,7 +1299,8 @@ function serveStatic(req, res) {
     return;
   }
   if(['/live-relay-server.js','/server-guard.js','/recordings-server.js','/broadcast-gate-server.js'].includes(urlPath)){sendJson(res,404,{error:'No trobat'});return}
-  if(['/tv-directe.html','/tv-table.html'].includes(urlPath)&&!broadcastGate.allowed(req))urlPath='/broadcast-hold.html';
+  const privateTvPreview=isAdmin(req)&&new URL(req.url,'http://localhost').searchParams.get('preview')==='admin';
+  if(['/tv-directe.html','/tv-table.html'].includes(urlPath)&&!broadcastGate.status().open&&!privateTvPreview)urlPath='/broadcast-hold.html';
   const filePath = path.resolve(PUBLIC_DIR,'.'+urlPath);
   if (!filePath.startsWith(PUBLIC_DIR+path.sep)) {
     res.writeHead(403);
@@ -1318,8 +1319,8 @@ function serveStatic(req, res) {
       ...(urlPath==='/service-worker.js'?{'Service-Worker-Allowed':'/'}:{}),
       "Content-Type": mimeTypes[ext] || "application/octet-stream",
     });
-    if(ext==='.html'){let html=content.toString('utf8');if(!['/login.html','/control-login.html'].includes(urlPath))html=html.replace('</head>','<link rel="stylesheet" href="/connection.css?v=20261106-1"><script src="/connection.js?v=20261106-1"></script></head>');if(urlPath==='/admin.html')html=html.replace('</head>','<link rel="stylesheet" href="/broadcast-gate.css?v=20261109-1"><script src="/broadcast-admin.js?v=20261109-1" defer></script></head>');
-      if(['/tv-directe.html','/tv-table.html'].includes(urlPath))html=html.replace('<head>','<head><script>window.CPoolAdminPreview='+JSON.stringify(isAdmin(req))+'</script><link rel="stylesheet" href="/broadcast-gate.css?v=20261109-1"><script src="/broadcast-watch.js?v=20261109-1" defer></script>');
+    if(ext==='.html'){let html=content.toString('utf8');if(!['/login.html','/control-login.html'].includes(urlPath))html=html.replace('</head>','<link rel="stylesheet" href="/connection.css?v=20261106-1"><script src="/connection.js?v=20261106-1"></script></head>');if(urlPath==='/admin.html')html=html.replace('</head>','<link rel="stylesheet" href="/broadcast-gate.css?v=20261109-1"><script src="/broadcast-admin.js?v=20261109-2" defer></script></head>');
+      if(['/tv-directe.html','/tv-table.html'].includes(urlPath))html=html.replace('<head>','<head><script>window.CPoolAdminPreview='+JSON.stringify(privateTvPreview)+'</script><link rel="stylesheet" href="/broadcast-gate.css?v=20261109-1"><script src="/broadcast-watch.js?v=20261109-2" defer></script>');
       res.end(html)}else res.end(content);
   });
 }
