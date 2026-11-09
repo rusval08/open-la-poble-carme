@@ -30,6 +30,7 @@ const CONTROL_SECRET =
     .digest("hex");
 const RECTIFICATION_PIN = process.env.RECTIFICATION_PIN || ADMIN_PASSWORD;
 const guard = require('./public/server-guard.js')();
+const broadcastGate=require('./public/broadcast-gate-server.js')({isAdmin,readBody,sendJson,dataDir:DATA_DIR,onChange:()=>{if(!broadcastGate.status().open)liveRoute.closePublicViewers();stateVersion++;broadcast()},pinHash:process.env.PUBLIC_BROADCAST_PIN_HASH});
 let persistedSnapshot=null,storageError=false;
 const instanceId=crypto.randomBytes(12).toString('hex');let stateVersion=0;
 const clients = new Set();
@@ -103,7 +104,7 @@ function saveData() {
     fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
     const payload = JSON.stringify(
       {
-        settings: state.settings,
+        settings: {...state.settings,publicBroadcast:broadcastGate.status()},
         scoreboards: state.scoreboards,
         players: state.players,
         bracketManual: state.bracketManual,
@@ -250,19 +251,24 @@ function sendJson(res, statusCode, value) {
   res.end(JSON.stringify(value));
 }
 function broadcast() {
-  const payload = `data: ${JSON.stringify(publicState())}\n\n`;
+  
   for (const client of clients) {
-    if(client.destroyed||client.writableEnded||client.writableLength>1024*1024){clients.delete(client);client.destroy();continue}try{client.write(payload)}catch{clients.delete(client);client.destroy()}
+    if(client.destroyed||client.writableEnded||client.writableLength>1024*1024){clients.delete(client);client.destroy();continue}try{client.write(`data: ${JSON.stringify(viewState(client.cpoolRequest))}\n\n`)}catch{clients.delete(client);client.destroy()}
   }
 }
 function publicState() {
   return {
     _meta:{instanceId,version:stateVersion},
-    settings: state.settings,
+    settings: {...state.settings,publicBroadcast:broadcastGate.status()},
     scoreboards: state.scoreboards,
     players: state.players,
     bracketManual: state.bracketManual,
   };
+}
+function viewState(req){
+ const value=publicState();if(broadcastGate.allowed(req))return value;
+ value.settings=structuredClone(value.settings);value.settings.youtubeVideoId='';value.settings.youtubeVideoId2='';
+ value.settings.production={};return value;
 }
 function readBody(req,limit=1000000){return new Promise((resolve,reject)=>{let body='',bytes=0,done=false;req.on('data',chunk=>{if(done)return;bytes+=chunk.length;if(bytes>limit){done=true;reject(bracketError(413,'La petició és massa gran'));return}body+=chunk});req.on('end',()=>{if(!done){done=true;resolve(body)}});req.on('error',e=>{if(!done){done=true;reject(e)}});req.on('aborted',()=>{if(!done){done=true;reject(bracketError(400,'Petició interrompuda'))}})})}
 function parseCookies(req) {
@@ -1292,7 +1298,8 @@ function serveStatic(req, res) {
     );
     return;
   }
-  if(['/live-relay-server.js','/server-guard.js','/recordings-server.js'].includes(urlPath)){sendJson(res,404,{error:'No trobat'});return}
+  if(['/live-relay-server.js','/server-guard.js','/recordings-server.js','/broadcast-gate-server.js'].includes(urlPath)){sendJson(res,404,{error:'No trobat'});return}
+  if(['/tv-directe.html','/tv-table.html'].includes(urlPath)&&!broadcastGate.allowed(req))urlPath='/broadcast-hold.html';
   const filePath = path.resolve(PUBLIC_DIR,'.'+urlPath);
   if (!filePath.startsWith(PUBLIC_DIR+path.sep)) {
     res.writeHead(403);
@@ -1311,7 +1318,9 @@ function serveStatic(req, res) {
       ...(urlPath==='/service-worker.js'?{'Service-Worker-Allowed':'/'}:{}),
       "Content-Type": mimeTypes[ext] || "application/octet-stream",
     });
-    if(ext==='.html'){let html=content.toString('utf8');if(!['/login.html','/control-login.html'].includes(urlPath))html=html.replace('</head>','<link rel="stylesheet" href="/connection.css?v=20261106-1"><script src="/connection.js?v=20261106-1"></script></head>');res.end(html)}else res.end(content);
+    if(ext==='.html'){let html=content.toString('utf8');if(!['/login.html','/control-login.html'].includes(urlPath))html=html.replace('</head>','<link rel="stylesheet" href="/connection.css?v=20261106-1"><script src="/connection.js?v=20261106-1"></script></head>');if(urlPath==='/admin.html')html=html.replace('</head>','<link rel="stylesheet" href="/broadcast-gate.css?v=20261109-1"><script src="/broadcast-admin.js?v=20261109-1" defer></script></head>');
+      if(['/tv-directe.html','/tv-table.html'].includes(urlPath))html=html.replace('<head>','<head><script>window.CPoolAdminPreview='+JSON.stringify(isAdmin(req))+'</script><link rel="stylesheet" href="/broadcast-gate.css?v=20261109-1"><script src="/broadcast-watch.js?v=20261109-1" defer></script>');
+      res.end(html)}else res.end(content);
   });
 }
 const liveRoute = require("./public/live-relay-server.js")({
@@ -1325,9 +1334,12 @@ const server = http.createServer(async (req, res) => {
  try{
  const blocked=guard.begin(req,res);if(blocked){sendJson(res,blocked.status,{error:blocked.error});return}
   const url = new URL(req.url, 'http://localhost');
+  if(await broadcastGate.route(req,res,url))return;
+  if(!broadcastGate.allowed(req)&&url.pathname.startsWith('/api/live/')){sendJson(res,403,{error:'Emissió pública tancada per l’organització'});return}
+  if(!broadcastGate.allowed(req)&&url.pathname==='/api/recordings/public'){sendJson(res,403,{error:'Les TV Table encara no estan obertes al públic'});return}
   if(req.method==='POST'&&['/api/login','/api/control-login'].includes(url.pathname)&&guard.limited(req)){res.setHeader('Retry-After','900');sendJson(res,429,{error:'Massa intents. Espera 15 minuts abans de tornar-ho a provar.'});return}
   if (req.method === "GET" && url.pathname === "/api/state") {
-    sendJson(res, 200, publicState());
+    sendJson(res, 200, viewState(req));
     return;
   }
   if (await recordingsRoute(req,res,url)) return;
@@ -1400,7 +1412,8 @@ const server = http.createServer(async (req, res) => {
       "X-Accel-Buffering": "no",
     });
     res.write("retry: 1000\n\n");
-    res.write(`data: ${JSON.stringify(publicState())}\n\n`);
+    res.cpoolRequest=req;
+    res.write(`data: ${JSON.stringify(viewState(req))}\n\n`);
     clients.add(res);
     const heartbeat = setInterval(() => {if(res.destroyed||res.writableEnded||res.writableLength>1024*1024){clearInterval(heartbeat);clients.delete(res);res.destroy();return}res.write('event: heartbeat\ndata: '+Date.now()+'\n\n');},10000);
     req.on("close", () => {
@@ -1678,3 +1691,5 @@ server.listen(PORT, "0.0.0.0", () => {
     `Pantalles: http://localhost:${PORT}/scoreboard/1 ... /scoreboard/${SCOREBOARD_COUNT}`,
   );
 });
+
+
