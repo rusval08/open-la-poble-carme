@@ -15,7 +15,8 @@ module.exports=function createBroadcastGate({isAdmin,readBody,sendJson,dataDir,o
   if(req.method!=='POST'){sendJson(res,405,{error:'Mètode no permès'});return true}
   if(!isAdmin(req)){sendJson(res,401,{error:'Cal iniciar sessió com a administrador'});return true}
   if(!expected){sendJson(res,503,{error:'Cal configurar el PIN de seguretat al servei de Render'});return true}
-  const key=digest(req.headers.cookie||req.socket.remoteAddress||'').toString('hex'),now=Date.now();
+  const address=String(req.headers['x-forwarded-for']||req.socket.remoteAddress||'').split(',').at(-1).trim();
+  const key=digest(address).toString('hex'),now=Date.now();
   for(const[k,v]of attempts)if(v.until<=now)attempts.delete(k);
   if((attempts.get(key)?.count||0)>=5){res.setHeader('Retry-After','900');sendJson(res,429,{error:'Massa intents de PIN. Espera 15 minuts.'});return true}
   try{
