@@ -11,3 +11,10 @@ function addHeadingLogo(){
  document.querySelectorAll('.results-header h1[data-tournament-name],.admin-header h1[data-tournament-name],.topbar h1[data-tournament-name]').forEach(title=>{if(title.parentElement.classList.contains('cpool-heading-line'))return;const row=document.createElement('div');row.className='cpool-heading-line';title.before(row);row.append(title);const logo=document.createElement('img');logo.className='cpool-heading-logo';logo.src='/cpool-logo.png';logo.alt='CPool';logo.width=72;logo.height=72;logo.decoding='async';row.append(logo)})
 }
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',addHeadingLogo)}else{addHeadingLogo()}
+
+function setupPolishedAppearance(){
+ if(document.body.matches('.results-body,.bracket-body')&&new URLSearchParams(location.search).get('pantalla')!=='1'&&!location.pathname.includes('pantalla.html'))document.body.classList.add('cpool-public-standard');
+ if(!document.querySelector('#cpoolPolishStyle')){const link=document.createElement('link');link.id='cpoolPolishStyle';link.rel='stylesheet';link.href='/app-polish.css?v=20261109-1';document.head.append(link)}
+ if(document.body.classList.contains('admin-body')&&!document.querySelector('#cpoolAdminWorkspace')){const script=document.createElement('script');script.id='cpoolAdminWorkspace';script.src='/admin-workspace.js?v=20261109-1';document.body.append(script)}
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setupPolishedAppearance);else setupPolishedAppearance();

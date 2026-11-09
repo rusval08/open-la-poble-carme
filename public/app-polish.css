@@ -1,0 +1,170 @@
+/* Shared visual rhythm; dedicated TV/HDMI fullscreen layouts keep their sizing. */
+.cpool-public-standard{font-weight:400;color:#e6edf2}
+.cpool-public-standard>.results-header.professional-toolbar-header{align-items:center!important;gap:16px!important;padding:22px max(18px,calc((100vw - 1200px)/2))!important;background:#0a1d29!important;border-bottom:1px solid #2c4656!important;box-shadow:none}
+.cpool-public-standard .results-brand{border:0;padding:0!important;text-align:center;max-width:100%}
+.cpool-public-standard .cpool-heading-line{justify-content:center;gap:12px}
+.cpool-public-standard .results-header h1{font-size:clamp(24px,2.6vw,34px)!important;line-height:1.2!important;font-weight:650!important;letter-spacing:0;text-shadow:none}
+.cpool-public-standard .cpool-heading-logo{width:52px;height:52px}
+.cpool-public-standard .results-brand p{font-size:12px;font-weight:500;text-transform:none;letter-spacing:.04em;color:#a8bdca;margin:6px 0 0}
+.cpool-public-standard .professional-toolbar{justify-content:center!important;gap:6px!important;padding-bottom:7px}
+.cpool-public-standard .professional-toolbar>a,.cpool-public-standard .professional-toolbar>button{flex:0 0 auto!important;min-height:44px!important;height:44px!important;font-size:13px!important;font-weight:500!important;padding:0 13px!important;gap:8px!important}
+.cpool-public-standard .results-hero-title{max-width:900px;gap:18px;margin:28px auto 22px;padding-inline:18px;grid-template-columns:minmax(20px,1fr) minmax(0,auto) minmax(20px,1fr)}
+.cpool-public-standard .results-hero-title h2{font-size:clamp(21px,2.2vw,28px)!important;line-height:1.25;font-weight:600;text-transform:none;text-shadow:none}
+.cpool-public-standard .results-motion-tools{max-width:1040px;margin:0 auto 16px;padding-inline:18px;gap:10px;flex-wrap:wrap;font-size:12px;line-height:1.5}
+.cpool-public-standard .results-motion-tools>span{font-weight:400}
+.cpool-public-standard .results-motion-tools button,.cpool-public-standard .results-large-link{font-size:12px;min-height:44px;font-weight:600;padding:10px 14px;border-radius:0}
+.cpool-public-standard .results-motion-window{max-width:1040px;padding-inline:18px;margin-inline:auto}
+.cpool-public-standard .results-motion-track .result-card{border:1px solid #355162;background:#0d2635;box-shadow:none}
+.cpool-public-standard .results-motion-track .result-title{min-height:36px;padding:8px 16px}
+.cpool-public-standard .results-motion-track .result-title span{font-size:14px!important;font-weight:600;text-transform:none}
+.cpool-public-standard .results-motion-track .result-title small{font-size:10px;font-weight:500}
+.cpool-public-standard .results-motion-track .result-score{padding:16px 20px;gap:16px}
+.cpool-public-standard .results-motion-track .result-player strong{font-size:clamp(14px,1.5vw,18px)!important;font-weight:600!important;line-height:1.35;text-transform:none!important}
+.cpool-public-standard .results-motion-track .result-player:before{font-size:11px;font-weight:400;color:#9eb5c3}
+.cpool-public-standard .results-motion-track .result-player span{font-size:clamp(32px,3vw,44px)!important;font-weight:600;line-height:1.1;text-shadow:none}
+.cpool-public-standard .results-motion-track .result-divider{font-size:22px;font-weight:400}
+.cpool-public-standard .results-motion-track .result-winner{font-size:11px;font-weight:400;text-transform:none;gap:9px;padding:6px 12px;min-height:32px}
+.cpool-public-standard .results-info-panel{max-width:1040px;width:calc(100% - 36px);margin-inline:auto;padding:20px;gap:20px;border:1px solid #355162;border-radius:0;box-shadow:none}
+.cpool-public-standard .results-info-panel strong{font-size:14px;font-weight:600;text-transform:none}
+.cpool-public-standard .results-info-panel p{font-size:13px;font-weight:400;line-height:1.6}
+.cpool-public-standard .results-info-panel .results-panel-button{font-size:12px;font-weight:600;min-width:0;min-height:44px;border-radius:0;text-transform:none}
+.cpool-public-standard .live-now-section{max-width:1076px;margin-inline:auto;padding-inline:18px}
+.cpool-public-standard .live-now-card{box-shadow:none;border:1px solid #355162;border-radius:0}
+.cpool-public-standard .stats-summary{max-width:1136px;margin-inline:auto;gap:12px;padding-inline:18px}
+.cpool-public-standard .stats-summary article{border:1px solid #355162;border-radius:0;padding:16px;box-shadow:none;background:#0d2635}
+.cpool-public-standard .stats-summary strong{font-size:26px;font-weight:600;line-height:1.25}
+.cpool-public-standard .stats-summary article:last-child strong{font-size:16px;line-height:1.5}
+.cpool-public-standard .stats-summary span{font-size:10px;font-weight:500;letter-spacing:.03em}
+.cpool-public-standard .stats-table-card{max-width:1100px;margin-inline:auto;width:calc(100% - 36px);border:1px solid #355162;border-radius:0;box-shadow:none}
+.cpool-public-standard .stats-table-head{padding:16px 18px}
+.cpool-public-standard .stats-table-head strong{font-size:19px;font-weight:600;text-transform:none}
+.cpool-public-standard .stats-table-head span{font-size:11px;font-weight:400;text-transform:none;line-height:1.5}
+.cpool-public-standard .stats-table td{font-size:13px;font-weight:400}
+.cpool-public-standard .stats-table td strong{font-size:14px;font-weight:600}
+.cpool-public-standard .stats-table th{font-size:10px;font-weight:600;text-transform:none}
+.cpool-public-standard .stats-motion-toolbar,.cpool-public-standard .stats-motion-note{max-width:1136px;margin-inline:auto;padding-inline:18px;font-size:12px}
+.cpool-public-standard .stats-motion-toolbar strong{font-size:13px;font-weight:500}
+.cpool-public-standard .live-scroll-stage{max-width:1040px;margin-inline:auto}
+.cpool-public-standard .live-scroll-card{border-radius:0;border-width:1px;border-left-width:3px;box-shadow:none;padding:18px}
+.cpool-public-standard .live-scroll-card strong{font-size:clamp(16px,2vw,23px);font-weight:600;text-transform:none;line-height:1.35}
+.cpool-public-standard .live-scroll-card em{font-size:clamp(26px,3vw,38px);font-weight:600}
+.cpool-public-standard .live-scroll-card span,.cpool-public-standard .live-scroll-card p{font-size:12px;font-weight:400;text-transform:none;line-height:1.5}
+.cpool-public-standard.bracket-body .bracket-layout{max-width:1500px;margin-inline:auto}
+.cpool-public-standard .bracket-legend{font-size:12px;font-weight:400;max-width:100%;margin-inline:auto}
+.cpool-public-standard .bracket-legend strong{font-weight:500}
+.cpool-public-standard .mobile-bracket-matches .node-player span{font-size:15px;font-weight:500;text-transform:none}
+.cpool-public-standard:not(.tv-immersive) .tv-two-shell{max-width:1400px;margin-inline:auto}
+.cpool-public-standard:not(.tv-immersive) .tv-live-title{justify-content:center;text-align:center;margin-bottom:20px}
+.cpool-public-standard:not(.tv-immersive) .tv-live-title h2{font-size:23px;font-weight:600;line-height:1.3}
+.cpool-public-standard:not(.tv-immersive) .tv-camera-card>h3{font-size:14px;font-weight:500}
+.cpool-public-standard:not(.tv-immersive) .tv-video-waiting h3{font-size:17px;font-weight:600}
+.cpool-public-standard:not(.tv-immersive) .tv-video-waiting p{font-size:12px;line-height:1.6}
+.cpool-public-standard:not(.tv-immersive) .tv-live-score h3{font-size:14px;font-weight:500}
+.cpool-public-standard:not(.tv-immersive) .tv-live-score>strong{font-size:28px;font-weight:600}
+.cpool-public-standard:not(.tv-immersive) .broadcast-player{font-size:14px;font-weight:500}
+.cpool-public-standard:not(.tv-immersive) .broadcast-score-value{font-size:28px;font-weight:600}
+.cpool-public-standard .broadcast-hold-card h1{font-size:26px;font-weight:600}
+.cpool-public-standard .broadcast-hold-card p{font-size:14px;line-height:1.7}
+.cpool-public-standard .broadcast-hold-card img{width:64px;height:64px}
+
+/* The admin workspace groups existing controls without replacing their handlers. */
+.admin-body .admin-header{padding:18px max(18px,calc((100vw - 1280px)/2));gap:14px;box-shadow:none;background:#0a1d29}
+.admin-body .admin-header h1{font-size:28px!important;font-weight:650;line-height:1.2;text-shadow:none}
+.admin-body .cpool-heading-logo{width:48px;height:48px}
+.admin-body .admin-header>a{font-size:12px;font-weight:600;min-height:44px;display:inline-flex;align-items:center;padding:10px 14px}
+.admin-body .admin-layout{max-width:1320px;width:100%;margin:0 auto;padding:18px 20px 40px;gap:20px}
+.admin-workspace-nav{position:sticky;top:0;z-index:60;background:#0a1d2af5;border:1px solid #355162;display:flex;gap:4px;padding:5px;overflow-x:auto;scrollbar-width:thin;overscroll-behavior-x:contain}
+.admin-workspace-nav button{flex:1 0 auto;min-height:46px;padding:10px 16px;border:1px solid transparent;background:transparent;color:#b9cbd7;font:500 14px Arial;white-space:nowrap}
+.admin-workspace-nav button[aria-selected=true]{background:#153344;border-color:#446579;color:#efd497;box-shadow:inset 0 -2px #c6a565}
+.admin-workspace-nav button:focus-visible,.admin-shortcut:focus-visible,.admin-workspace-details>summary:focus-visible{outline:2px solid #e7c677;outline-offset:2px}
+.admin-workspace-pane{display:grid;gap:20px;min-width:0;scroll-margin-top:80px}
+.admin-workspace-pane[hidden]{display:none!important}
+.admin-workspace-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.admin-workspace-heading h2{font-size:21px;font-weight:600;margin:0}
+.admin-workspace-heading p{font-size:13px;line-height:1.6;margin:6px 0 0;color:#a8bdca}
+.admin-shortcuts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.admin-shortcut{display:grid;gap:6px;min-height:104px;padding:16px;border:1px solid #355162;background:#102a3a;text-decoration:none;color:#edf4f6}
+.admin-shortcut:hover{border-color:#c6a565;background:#173648}
+.admin-shortcut strong{font-size:16px;font-weight:600;line-height:1.35}
+.admin-shortcut span{font-size:12px;line-height:1.5;color:#a8bdca}
+.admin-workspace-pane .admin-section h2,.admin-workspace-pane .production-heading h2{font-size:21px;font-weight:600;text-shadow:none}
+.admin-workspace-pane .broadcast-gate-panel{padding:20px;border-color:#69755f;gap:12px;background:#102a37}
+.admin-workspace-pane .broadcast-gate-panel h2{font-size:21px;font-weight:600;margin-bottom:10px}
+.admin-workspace-pane .broadcast-gate-panel p{font-size:13px;font-weight:400;line-height:1.6}
+.admin-workspace-pane .broadcast-gate-panel .broadcast-gate-state{font-size:13px;font-weight:600}
+.admin-workspace-pane .broadcast-gate-panel .eyebrow{font-size:10px;letter-spacing:.08em;color:#a8bdca}
+.admin-workspace-pane .broadcast-gate-panel .broadcast-preview-link{justify-self:start;min-height:44px;font-size:12px}
+.admin-workspace-pane .broadcast-gate-toggle{justify-self:start;min-height:46px;font-size:13px;min-width:260px}
+.admin-workspace-pane .production-panel{padding:18px;box-shadow:none}
+.admin-workspace-pane .production-camera{padding:16px}
+.admin-workspace-pane .production-camera h3{font-size:19px;font-weight:600}
+.admin-workspace-pane .production-actions{gap:8px}
+.admin-workspace-pane .production-action{font-size:12px!important;min-height:72px;letter-spacing:0}
+.admin-workspace-pane .production-heading p,.admin-workspace-pane .production-note{font-size:12px;line-height:1.6}
+.admin-workspace-pane .admin-card{min-height:106px;box-shadow:none;border-width:1px;border-left-width:3px}
+.admin-workspace-pane .admin-card strong{font-size:18px;font-weight:600}
+.admin-workspace-pane .admin-card p{font-size:13px;font-weight:400}
+.admin-workspace-pane .admin-live-summary{gap:12px}
+.admin-workspace-pane .admin-live-summary article{padding:16px;box-shadow:none;border-radius:0}
+.admin-workspace-pane .admin-live-summary strong{font-size:26px;font-weight:600}
+.admin-workspace-pane .admin-live-summary span{font-size:10px;font-weight:500}
+.admin-workspace-details{border:1px solid #355162;background:#0d2635;padding:0 16px;min-width:0}
+.admin-workspace-details>summary{min-height:52px;align-content:center;cursor:pointer;font-size:14px;font-weight:600;color:#d6e4ec;padding:12px 0}
+.admin-workspace-details[open]{padding-bottom:16px}
+.admin-workspace-details>.operations-panel{padding:14px;border:0}
+.admin-workspace-details .operations-links{display:none}
+.admin-workspace-details .championship-backups,.admin-workspace-details .championship-settings,.admin-workspace-details .dvr-admin{margin:0;border:0;padding:12px 0 0}
+.admin-workspace-details .championship-backups>h2,.admin-workspace-details .championship-settings>h2{font-size:18px;font-weight:600}
+.admin-workspace-details .operations-health{grid-template-columns:repeat(3,minmax(0,1fr))}
+.admin-workspace-details .admin-section{padding-top:12px}
+.admin-workspace-details .admin-section>h2{display:none}
+.admin-workspace-details .operations-advanced{border:0;padding:0;margin:0}
+.admin-workspace-details .operations-advanced>summary{display:none}
+.admin-workspace-pane .championship-backups [hidden],.admin-workspace-pane .broadcast-pin-form[hidden]{display:none!important}
+.admin-tv-shortcuts{display:flex;gap:8px;flex-wrap:wrap}
+.admin-tv-shortcuts a{min-height:44px;display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border:1px solid #355162;background:#102a3a;color:#d6e4ec;font-size:12px;text-decoration:none}
+@media(max-width:1100px){.cpool-public-standard .professional-toolbar{justify-content:flex-start!important}}
+@media(max-width:760px){
+ .cpool-public-standard>.results-header.professional-toolbar-header{padding:16px 14px 10px!important;gap:14px!important}
+ .cpool-public-standard .results-header h1{font-size:24px!important}
+ .cpool-public-standard .cpool-heading-logo{width:42px;height:42px}
+ .cpool-public-standard .results-brand p{font-size:11px;line-height:1.5}
+ .cpool-public-standard .professional-toolbar>a,.cpool-public-standard .professional-toolbar>button{font-size:12px!important;padding-inline:11px!important}
+ .cpool-public-standard .results-hero-title{margin:22px auto 18px;padding-inline:14px;gap:10px}
+ .cpool-public-standard .results-motion-tools{padding-inline:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .cpool-public-standard .results-motion-tools>span{grid-column:1/-1;font-size:11px}
+ .cpool-public-standard .results-motion-window{padding-inline:14px}
+ .cpool-public-standard .results-motion-track .result-score{padding:14px 10px;gap:10px}
+ .cpool-public-standard .results-motion-track .result-player strong{font-size:14px!important;line-height:1.35}
+ .cpool-public-standard .results-motion-track .result-player span{font-size:34px!important}
+ .cpool-public-standard .results-motion-track .result-player:before{font-size:10px}
+ .cpool-public-standard .stats-summary{padding-inline:14px;gap:8px}
+ .cpool-public-standard .stats-summary article{padding:12px 8px}
+ .cpool-public-standard .stats-summary strong{font-size:24px}
+ .cpool-public-standard .stats-summary article:last-child strong{font-size:13px}
+ .cpool-public-standard .stats-summary span{font-size:9px}
+ .cpool-public-standard .stats-table-card{width:calc(100% - 28px)}
+ .cpool-public-standard .results-info-panel{width:calc(100% - 28px);padding:16px}
+ .cpool-public-standard .broadcast-hold-card h1{font-size:23px}
+ .admin-body .admin-header{padding:14px;gap:10px}
+ .admin-body .admin-header h1{font-size:24px!important}
+ .admin-body .cpool-heading-logo{width:40px;height:40px}
+ .admin-body .admin-layout{padding:12px 14px 32px;gap:14px}
+ .admin-workspace-nav{gap:2px;padding:4px;top:env(safe-area-inset-top,0px)}
+ .admin-workspace-nav button{font-size:12px;padding:10px 11px;min-height:44px}
+ .admin-workspace-pane{gap:16px}
+ .admin-workspace-heading h2{font-size:19px}
+ .admin-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .admin-shortcut{min-height:85px;padding:12px;gap:5px}
+ .admin-shortcut strong{font-size:14px}
+ .admin-shortcut span{font-size:11px}
+ .admin-workspace-pane .broadcast-gate-panel{padding:14px}
+ .admin-workspace-pane .broadcast-gate-panel h2{font-size:20px}
+ .admin-workspace-pane .broadcast-gate-panel .broadcast-preview-link,.admin-workspace-pane .broadcast-gate-toggle{width:100%;min-width:0;justify-self:stretch;font-size:12px}
+ .admin-workspace-pane .production-panel,.admin-workspace-pane .production-camera{padding:12px}
+ .admin-workspace-details{padding-inline:12px}
+ .admin-workspace-details .operations-health{grid-template-columns:minmax(0,1fr)}
+ .admin-workspace-pane .admin-live-summary{gap:8px}
+ .admin-workspace-pane .admin-live-summary article{padding:12px 8px}
+ .admin-workspace-pane .admin-live-summary strong{font-size:23px}
+}
