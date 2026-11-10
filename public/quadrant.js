@@ -171,7 +171,6 @@ function finalHtml(bracket) {
 }
 function renderBracket() {
   const bracket = buildBracket();
-  renderMobileBracket(bracket);
   bracketCurrent.classList.add("paper-board");
   bracketCurrent.innerHTML = ` <section class="paper-bracket"> <header class="paper-title"> <h2>${escapeHtml(tournamentName())}</h2> </header> <div class="paper-grid"> <div class="paper-side paper-side-left"> ${sideRoundHtml(bracket, "left", "r128", "Últims 128", 0, 32)} ${sideRoundHtml(bracket, "left", "r64", "Últims 64", 0, 16)} ${sideRoundHtml(bracket, "left", "r32", "Últims 32", 0, 8)} ${sideRoundHtml(bracket, "left", "r16", "Vuitens", 0, 4)} ${sideRoundHtml(bracket, "left", "qf", "Quarts", 0, 2)} ${sideRoundHtml(bracket, "left", "sf", "Semifinal", 0, 1)} </div> ${finalHtml(bracket)} <div class="paper-side paper-side-right"> ${sideRoundHtml(bracket, "right", "sf", "Semifinal", 1, 2)} ${sideRoundHtml(bracket, "right", "qf", "Quarts", 2, 4)} ${sideRoundHtml(bracket, "right", "r16", "Vuitens", 4, 8)} ${sideRoundHtml(bracket, "right", "r32", "Últims 32", 8, 16)} ${sideRoundHtml(bracket, "right", "r64", "Últims 64", 16, 32)} ${sideRoundHtml(bracket, "right", "r128", "Últims 128", 32, 64)} </div> </div> </section> `;
   const completedMatches = rounds.reduce(
@@ -181,31 +180,6 @@ function renderBracket() {
   );
   if (!bracketNext) return;
   bracketNext.innerHTML = ` <article class="bracket-summary-card"> <span>Configuració</span> <strong>128 jugadors</strong> <p>Les taules carreguen automàticament els següents partits preparats.</p> </article> <article class="bracket-summary-card"> <span>Regla</span> <strong>A ${winTarget()} guanyades</strong> <p>Quan un jugador arriba a ${winTarget()}, passa automàticament al següent enfrontament.</p> </article> <article class="bracket-summary-card"> <span>Partits finalitzats</span> <strong>${completedMatches}/127</strong> <p>Els guanyadors apareixen col·locats en ordre del campionat.</p> </article> `;
-}
-let mobileBracketRound = 'r128';
-function renderMobileBracket(bracket) {
-  if (!document.querySelector('.public-button-nav')) return;
-  let panel = document.querySelector('#mobileBracketPanel');
-  if (!panel) {
-    panel = document.createElement('section');
-    panel.id = 'mobileBracketPanel';
-    panel.className = 'mobile-bracket-panel';
-    panel.setAttribute('aria-label', 'Quadrant per rondes');
-    panel.innerHTML = `<div class="mobile-bracket-tools"><label for="mobileBracketRound">Ronda<select id="mobileBracketRound">${rounds.map(r => `<option value="${r.key}">${escapeHtml(r.title)}</option>`).join('')}</select></label><button type="button" id="mobileBracketFull" aria-expanded="false">Veure esquema complet</button></div><p class="mobile-bracket-count" role="status"></p><div class="mobile-bracket-matches"></div>`;
-    bracketCurrent.before(panel);
-    panel.querySelector('select').addEventListener('change', event => {
-      mobileBracketRound = event.target.value;
-      renderMobileBracket(buildBracket());
-    });
-    panel.querySelector('button').addEventListener('click', event => {
-      const full = document.body.classList.toggle('mobile-bracket-full');
-      event.currentTarget.textContent = full ? 'Tornar a la llista' : 'Veure esquema complet';
-      event.currentTarget.setAttribute('aria-expanded', String(full));
-    });
-  }
-  const matches = bracket[mobileBracketRound] || [];
-  panel.querySelector('.mobile-bracket-count').textContent = `${matches.length} enfrontaments · ${matches.filter(m => m.top || m.bottom).length} amb jugadors assignats`;
-  panel.querySelector('.mobile-bracket-matches').innerHTML = matches.map(matchHtml).join('');
 }
 function applyBracketState(nextState) {
   const nextText = JSON.stringify(nextState);
