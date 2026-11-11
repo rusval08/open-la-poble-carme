@@ -671,6 +671,14 @@ function rememberProductionResult(board, winner, score) {
     score: score || `${board.homeScore} - ${board.awayScore}`,
     title: String(board.title || `Taula ${board.id}`),
   };
+  if (camera.finishSponsor) {
+    camera.mode = "image";
+    camera.imageUrl = camera.finishSponsor.imageUrl;
+    camera.title = camera.finishSponsor.name;
+    camera.message = "Patrocinador del campionat";
+    camera.updatedAt = Date.now();
+    return;
+  }
   if (camera.autoFinish && camera.mode === "live") {
     camera.mode = "winner";
     camera.shownResult = structuredClone(camera.result);
@@ -722,6 +730,16 @@ function patchProduction(body) {
     if (patch.imageUrl && !BroadcastState.imagePath(patch.imageUrl))
       throw bracketError(400, "Imatge no vàlida");
     next.imageUrl = patch.imageUrl || "";
+  }
+  if (Object.prototype.hasOwnProperty.call(patch, "finishSponsor")) {
+    const sponsor = patch.finishSponsor;
+    if (sponsor === null) next.finishSponsor = null;
+    else {
+      if (!sponsor || typeof sponsor !== "object" || Array.isArray(sponsor) ||
+          !BroadcastState.imagePath(sponsor.imageUrl) || typeof sponsor.name !== "string" || !sponsor.name.trim())
+        throw bracketError(400, "Selecciona un patrocinador amb una imatge vàlida");
+      next.finishSponsor = {name: BroadcastState.cleanText(sponsor.name,80),imageUrl: sponsor.imageUrl};
+    }
   }
   if (next.mode === "winner" && !next.result)
     throw bracketError(
@@ -805,6 +823,7 @@ function backupAssets(settings) {
     ...new Set(
       [
         ...[1, 2].map((id) => settings.production?.[id]?.imageUrl),
+        ...[1, 2].map((id) => settings.production?.[id]?.finishSponsor?.imageUrl),
         ...(settings.presentation?.sponsors || []).map((s) => s.imageUrl),
       ].filter(Boolean),
     ),
