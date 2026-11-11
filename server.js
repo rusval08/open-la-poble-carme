@@ -77,6 +77,7 @@ function normalizeWinTarget(value) {
   const target = Number(value);
   return [4, 5, 6, 7].includes(target) ? target : DEFAULT_WIN_TARGET;
 }
+function boardWinTarget(board) {return normalizeWinTarget(board.winTarget ?? state.settings.winTarget)}
 function defaultBracketManual() {
   return Object.fromEntries(
     MANUAL_ROUNDS.map(([key, count]) => [
@@ -147,6 +148,7 @@ const state = {
   scoreboards: Array.from({ length: SCOREBOARD_COUNT }, (_, index) => ({
     id: index + 1,
     title: `Taula ${index + 1}`,
+    winTarget: null,
     homeName: "JUGADOR LOCAL",
     awayName: "JUGADOR VISITANT",
     homeScore: 0,
@@ -181,14 +183,15 @@ if (Array.isArray(savedData.scoreboards)) {
     return {
       ...board,
       title: String(savedBoard.title || board.title),
+      winTarget: savedBoard.winTarget == null ? null : normalizeWinTarget(savedBoard.winTarget),
       homeName: String(savedBoard.homeName || board.homeName),
       awayName: String(savedBoard.awayName || board.awayName),
       homeScore: Math.min(
-        state.settings.winTarget,
+        normalizeWinTarget(savedBoard.winTarget ?? state.settings.winTarget),
         Math.max(0, Number(savedBoard.homeScore) || 0),
       ),
       awayScore: Math.min(
-        state.settings.winTarget,
+        normalizeWinTarget(savedBoard.winTarget ?? state.settings.winTarget),
         Math.max(0, Number(savedBoard.awayScore) || 0),
       ),
       period: String(savedBoard.period || board.period),
@@ -333,12 +336,18 @@ function updateScoreboard(id, patch) {
   if (board.locked && patch.locked !== false) {
     return board;
   }
+  if (Object.prototype.hasOwnProperty.call(patch, 'winTarget')) {
+    if (![4,5,6,7].includes(Number(patch.winTarget))) throw bracketError(400,'Tria un format entre 4 i 7 guanyades.');
+    if (board.rectificationEndsAt || Math.max(board.homeScore,board.awayScore) >= Number(patch.winTarget)) throw bracketError(409,'Posa els punts a zero o rectifica el resultat abans de canviar aquest format.');
+    patch.winTarget=Number(patch.winTarget);
+  }
   const scoreChanged =
     Object.prototype.hasOwnProperty.call(patch, "homeScore") ||
     Object.prototype.hasOwnProperty.call(patch, "awayScore");
   const previousHomeScore = Number(board.homeScore) || 0;
   const previousAwayScore = Number(board.awayScore) || 0;
   const allowed = [
+    "winTarget",
     "title",
     "homeName",
     "awayName",
@@ -362,7 +371,7 @@ function updateScoreboard(id, patch) {
   board.awayScore = Number.isFinite(Number(board.awayScore))
     ? Number(board.awayScore)
     : 0;
-  const winTarget = normalizeWinTarget(state.settings.winTarget);
+  const winTarget = boardWinTarget(board);
   board.homeScore = Math.min(winTarget, Math.max(0, board.homeScore));
   board.awayScore = Math.min(winTarget, Math.max(0, board.awayScore));
   const matchFinished =
@@ -920,10 +929,11 @@ function validateBackup(bundle) {
     ...state.scoreboards[index],
     id: index + 1,
     title: text(b.title) || "Taula " + (index + 1),
+    winTarget: b.winTarget == null ? null : normalizeWinTarget(b.winTarget),
     homeName: text(b.homeName) || "JUGADOR LOCAL",
     awayName: text(b.awayName) || "JUGADOR VISITANT",
-    homeScore: Math.min(target, Math.max(0, Number(b.homeScore) || 0)),
-    awayScore: Math.min(target, Math.max(0, Number(b.awayScore) || 0)),
+    homeScore: Math.min(normalizeWinTarget(b.winTarget ?? target), Math.max(0, Number(b.homeScore) || 0)),
+    awayScore: Math.min(normalizeWinTarget(b.winTarget ?? target), Math.max(0, Number(b.awayScore) || 0)),
     period: text(b.period, 10),
     clock: text(b.clock, 10),
     status: text(b.status),
@@ -1231,7 +1241,7 @@ function finishTableMatch(board, previousHomeScore, previousAwayScore) {
 function completeTableMatch(board, previousHomeScore, previousAwayScore) {
   board.rectificationEndsAt = "";
   const current = findCurrentMatchForBoard(board);
-  const winTarget = normalizeWinTarget(state.settings.winTarget);
+  const winTarget = boardWinTarget(board);
   const homeReached =
     board.homeScore >= winTarget && previousHomeScore < winTarget;
   const awayReached =
@@ -1600,11 +1610,11 @@ const server = http.createServer(async (req, res) => {
         state.settings.winTarget = normalizeWinTarget(body.winTarget);
         for (const board of state.scoreboards) {
           board.homeScore = Math.min(
-            state.settings.winTarget,
+            boardWinTarget(board),
             Math.max(0, Number(board.homeScore) || 0),
           );
           board.awayScore = Math.min(
-            state.settings.winTarget,
+            boardWinTarget(board),
             Math.max(0, Number(board.awayScore) || 0),
           );
         }
