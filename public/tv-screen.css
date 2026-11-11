@@ -46,3 +46,4 @@
  .tv-immersive .cpool-player-seek{appearance:none;-webkit-appearance:none;height:28px;margin:0;background:transparent;accent-color:#e33b44;touch-action:pan-y}
  .tv-immersive .cpool-player-delay{position:static;font-size:10px}
 }
+.tv-mobile-transport input.tv-mobile-seek{min-height:28px;max-height:28px;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;padding:0!important}.tv-immersive input.cpool-player-seek{min-height:28px;max-height:28px;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important}
