@@ -94,7 +94,7 @@ function renderScreen(state) {
   tournamentNameElements.forEach((element) => {
     element.textContent = state.settings?.tournamentName || "Open la Pobla";
   });
-  screenResults.innerHTML = `<h2>Resultats en directe</h2><div class="big-score-grid">${(state.scoreboards || []).map((board) => `<article><span>${window.CPoolEscape(board.title)}</span><strong>${window.CPoolEscape(board.homeName)} ${board.homeScore} - ${board.awayScore} ${window.CPoolEscape(board.awayName)}</strong><small>Partit a ${state.settings?.winTarget || 5} guanyades</small></article>`).join("")}</div>`;
+  screenResults.innerHTML = `<h2>Resultats en directe</h2><div class="big-score-grid">${(state.scoreboards || []).map((board) => `<article><span>${window.CPoolEscape(board.title)}</span><strong>${window.CPoolEscape(board.homeName)} ${board.homeScore} - ${board.awayScore} ${window.CPoolEscape(board.awayName)}</strong><small>Partit a ${board.winTarget ?? state.settings?.winTarget ?? 5} guanyades</small></article>`).join("")}</div>`;
   const leaders = buildLeaders(state);
   screenLeaders.innerHTML = `<h2>Rànquing actual</h2><div class="big-leader-grid">${leaders.length ? leaders.map((player, index) => `<article><span>${index + 1}</span><strong>${window.CPoolEscape(player.name)}</strong><em>${player.wins} victòries · ${player.gamesWon - player.gamesLost > 0 ? "+" : ""}${player.gamesWon - player.gamesLost}</em></article>`).join("") : "<p>Encara no hi ha partits finalitzats.</p>"}</div>`;
 }

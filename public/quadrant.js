@@ -25,8 +25,8 @@ let bracketState = {
   bracketManual: {},
 };
 let lastBracketStateText = "";
-function winTarget() {
-  const target = Number(bracketState.settings?.winTarget || 5);
+function winTarget(board) {
+  const target = Number(board?.winTarget ?? bracketState.settings?.winTarget ?? 5);
   return [4, 5, 6, 7].includes(target) ? target : 5;
 }
 document.head.insertAdjacentHTML(
@@ -51,7 +51,7 @@ function playerName(index) {
   return name;
 }
 function tableWinner(board) {
-  const target = winTarget();
+  const target = winTarget(board);
   if (board.homeScore >= target && board.homeScore > board.awayScore)
     return board.homeName;
   if (board.awayScore >= target && board.awayScore > board.homeScore)
@@ -59,7 +59,7 @@ function tableWinner(board) {
   return "";
 }
 function sideWinner(board, topName, bottomName) {
-  const target = winTarget();
+  const target = winTarget(board);
   if (board.homeScore >= target && board.homeScore > board.awayScore)
     return topName;
   if (board.awayScore >= target && board.awayScore > board.homeScore)

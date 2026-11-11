@@ -17,12 +17,12 @@ let previousScores = new Map();
 let previousWinners = new Map();
 let hasRenderedResults = false;
 let lastStateText = "";
-function winTarget() {
-  const target = Number(resultsState.settings?.winTarget || 5);
+function winTarget(board) {
+  const target = Number(board?.winTarget ?? resultsState.settings?.winTarget ?? 5);
   return [4, 5, 6, 7].includes(target) ? target : 5;
 }
 function resultWinner(board) {
-  const target = winTarget();
+  const target = winTarget(board);
   if (board.homeScore >= target && board.homeScore > board.awayScore)
     return board.homeName;
   if (board.awayScore >= target && board.awayScore > board.homeScore)
@@ -56,7 +56,7 @@ function renderResults() {
     element.textContent = winTarget();
   });
   winTargetTextElements.forEach((element) => {
-    element.textContent = `El primer jugador que arribi a ${winTarget()} guanyades s'emporta el partit.`;
+    element.textContent = "El format de cada partit s’indica a la seva taula.";
   });
   renderLiveNow();
   resultsGrid.innerHTML = resultsState.scoreboards
@@ -67,7 +67,7 @@ function renderResults() {
         hasRenderedResults && previous && board.homeScore > previous.homeScore;
       const awayRaised =
         hasRenderedResults && previous && board.awayScore > previous.awayScore;
-      return `<article class="result-card theme-${window.CPoolEscape(board.theme)}"><span id="taula-${window.CPoolEscape(board.id)}" class="anchor-target"></span><div class="result-title"><span>${window.CPoolEscape(board.title)}</span><small>${winner ? "Final" : `A ${winTarget()}`}</small></div><div class="result-score"><div class="result-player ${homeRaised ? "player-flash" : ""}"><strong>${window.CPoolEscape(board.homeName)}</strong><span class="${homeRaised ? "score-flash" : ""}">${board.homeScore}</span></div><div class="result-divider">-</div><div class="result-player right ${awayRaised ? "player-flash" : ""}"><strong>${window.CPoolEscape(board.awayName)}</strong><span class="${awayRaised ? "score-flash" : ""}">${board.awayScore}</span></div></div><div class="result-winner">${winner ? `Guanya: ${window.CPoolEscape(winner)}` : `Partit a ${winTarget()} guanyades`}</div></article>`;
+      return `<article class="result-card theme-${window.CPoolEscape(board.theme)}"><span id="taula-${window.CPoolEscape(board.id)}" class="anchor-target"></span><div class="result-title"><span>${window.CPoolEscape(board.title)}</span><small>${winner ? "Final" : `A ${winTarget(board)}`}</small></div><div class="result-score"><div class="result-player ${homeRaised ? "player-flash" : ""}"><strong>${window.CPoolEscape(board.homeName)}</strong><span class="${homeRaised ? "score-flash" : ""}">${board.homeScore}</span></div><div class="result-divider">-</div><div class="result-player right ${awayRaised ? "player-flash" : ""}"><strong>${window.CPoolEscape(board.awayName)}</strong><span class="${awayRaised ? "score-flash" : ""}">${board.awayScore}</span></div></div><div class="result-winner">${winner ? `Guanya: ${window.CPoolEscape(winner)}` : `Partit a ${winTarget(board)} guanyades`}</div></article>`;
     })
     .join("");
   previousScores = new Map(
@@ -94,7 +94,7 @@ function detectFinishedMatches(nextState) {
   if (!hasRenderedResults) return;
   (nextState.scoreboards || []).forEach((board) => {
     const oldWinner = previousWinners.get(board.id);
-    const target = Number(nextState.settings?.winTarget || 5);
+    const target = Number(board.winTarget ?? nextState.settings?.winTarget ?? 5);
     const safeTarget = [4, 5, 6, 7].includes(target) ? target : 5;
     let winner = null;
     if (board.homeScore >= safeTarget && board.homeScore > board.awayScore)
