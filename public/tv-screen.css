@@ -31,3 +31,18 @@
 @media(min-width:761px) and (min-height:601px) and (pointer:fine){.tv-mobile-transport{display:none}}
 
 
+
+/* Compact touch timeline for fullscreen TV. */
+.tv-mobile-seek{display:block;width:100%;box-sizing:border-box;height:28px;margin:0;padding:0;appearance:none;-webkit-appearance:none;background:transparent;accent-color:#e33b44;cursor:pointer;touch-action:pan-y}
+.tv-mobile-seek::-webkit-slider-runnable-track,.cpool-player-seek::-webkit-slider-runnable-track{height:3px;background:linear-gradient(to right,#e33b44 var(--played,0%),#ffffff55 var(--played,0%));border-radius:0}
+.tv-mobile-seek::-webkit-slider-thumb,.cpool-player-seek::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:12px;height:12px;margin-top:-4.5px;border:0;border-radius:50%;background:#e33b44}
+.tv-mobile-seek::-moz-range-track{height:3px;background:#ffffff55}.tv-mobile-seek::-moz-range-progress{height:3px;background:#e33b44}.tv-mobile-seek::-moz-range-thumb{width:12px;height:12px;border:0;border-radius:50%;background:#e33b44}
+.tv-mobile-seek:disabled{opacity:.35;cursor:default}.tv-mobile-timeline-info{display:flex;align-items:center;justify-content:space-between;gap:10px}.tv-mobile-delay{font:11px Arial;color:#ddd;font-variant-numeric:tabular-nums}.tv-mobile-transport .tv-mobile-timeline-info button{flex:0 0 auto;min-height:28px;padding:2px 5px;border:0;background:transparent;color:#ddd;font:700 10px Arial}.tv-mobile-transport .tv-mobile-timeline-info button.at-live{color:#ff555e}.tv-mobile-transport p[hidden]{display:none}
+@media(max-width:760px),(pointer:coarse),(orientation:landscape) and (max-height:600px) and (max-width:1400px){
+ .tv-immersive .tv-mobile-transport{padding:0 12px 4px;border:0;background:linear-gradient(transparent,#000d)}
+ .tv-immersive .cpool-player-buttons [data-action=back],.tv-immersive .cpool-player-buttons [data-action=forward]{display:none!important}
+ .tv-immersive .cpool-player-buttons button{flex:0 0 auto;min-height:28px;border:0;background:transparent;padding:2px 8px;font-size:11px}
+ .tv-immersive .cpool-player-buttons [data-action=live]{margin-right:auto}.tv-immersive .cpool-player-buttons [data-action=live].at-live{color:#ff555e}
+ .tv-immersive .cpool-player-seek{appearance:none;-webkit-appearance:none;height:28px;margin:0;background:transparent;accent-color:#e33b44;touch-action:pan-y}
+ .tv-immersive .cpool-player-delay{position:static;font-size:10px}
+}
