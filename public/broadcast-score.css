@@ -15,3 +15,4 @@
  .cast-format{font-size:8px}.cast-footer{padding:.35cqw 1.5cqw}.cast-channel{font-size:clamp(6px,.85cqw,8px)}.cast-tournament{font-size:clamp(8px,1.15cqw,11px)}.cast-channel-icon{width:11px;height:11px;font-size:7px}
  .cast-official{padding:3px 6px;gap:4px}.cast-official-logo{width:20px;height:20px}.cast-official-name{font-size:9px}.cast-official-label{font-size:6px}
 }
+.tv-directe-body.tv-immersive .cpool-cast-overlay{bottom:env(safe-area-inset-bottom,0px)!important}.tv-immersive .cast-scoreboard{bottom:calc(2.7cqw + 3px)}
