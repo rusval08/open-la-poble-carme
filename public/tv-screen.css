@@ -47,3 +47,11 @@
  .tv-immersive .cpool-player-delay{position:static;font-size:10px}
 }
 .tv-mobile-transport input.tv-mobile-seek{min-height:28px;max-height:28px;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;padding:0!important}.tv-immersive input.cpool-player-seek{min-height:28px;max-height:28px;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important}
+
+/* Reveal transport only on deliberate interaction in fullscreen. */
+.tv-immersive .tv-mobile-transport{opacity:0!important;pointer-events:none!important;transition:opacity .2s}
+.tv-immersive .cpool-dvr-player .cpool-player-controls,.tv-immersive .cpool-dvr-player:hover .cpool-player-controls,.tv-immersive .cpool-dvr-player.is-paused .cpool-player-controls{opacity:0!important;pointer-events:none!important;transition:opacity .2s}
+.tv-immersive.tv-controls-visible .tv-mobile-transport,.tv-immersive.tv-scrubbing .tv-mobile-transport,.tv-immersive.tv-controls-visible .cpool-dvr-player .cpool-player-controls,.tv-immersive[data-tv-keyboard=true] .cpool-dvr-player:focus-within .cpool-player-controls{opacity:1!important;pointer-events:auto!important}
+.tv-immersive .cpool-dvr-video,.tv-immersive .tv-usb-video{object-position:center center!important}
+.tv-immersive[data-tv-fit=contain] .cpool-dvr-video,.tv-immersive[data-tv-fit=contain] .tv-usb-video{object-fit:contain!important}
+@media(prefers-reduced-motion:reduce){.tv-immersive .tv-mobile-transport,.tv-immersive .cpool-player-controls{transition:none!important}}

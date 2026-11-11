@@ -7,8 +7,8 @@
   bar.innerHTML='<input class="tv-mobile-seek" type="range" min="0" max="1" step="0.1" value="0" aria-label="Desplaçar el vídeo" disabled><div class="tv-mobile-timeline-info"><span class="tv-mobile-delay">En espera</span><button type="button" data-move="live" disabled>● EN DIRECTE</button></div><p role="status">En espera de vídeo.</p>';
   card.querySelector('.tv-video').after(bar);
   let scrubbing=false;const seek=bar.querySelector('input');
-  seek.addEventListener('input',()=>{scrubbing=true;window.TVScreen?.reveal()});
-  seek.addEventListener('change',()=>{const video=current(),r=range(video);if(r)video.currentTime=Math.max(r.start,Math.min(r.end-.25,Number(seek.value)));scrubbing=false});
+  seek.addEventListener('input',()=>{scrubbing=true;document.body.classList.add('tv-scrubbing');window.TVScreen?.reveal()});
+  seek.addEventListener('change',()=>{const video=current(),r=range(video);if(r)video.currentTime=Math.max(r.start,Math.min(r.end-.25,Number(seek.value)));scrubbing=false;document.body.classList.remove('tv-scrubbing');window.TVScreen?.reveal()});
   seek.addEventListener('pointercancel',()=>{scrubbing=false});
   function current(){return card.querySelector('.tv-video video')}
   function range(video){if(!video?.seekable?.length)return null;return {start:video.seekable.start(0),end:video.seekable.end(video.seekable.length-1)}}
