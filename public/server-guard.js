@@ -1,7 +1,8 @@
 // Server-only module. Never served to browsers.
 const crypto=require('crypto');
 module.exports=function createGuard(){
- const secret=crypto.randomBytes(32),attempts=new Map(),revoked=new Map(),ttl=12*60*60*1000;
+ const configured=process.env.CPOOL_SESSION_SECRET;
+ const secret=configured&&configured.length>=64?crypto.createHmac('sha256',configured).update(JSON.stringify([process.env.ADMIN_PASSWORD||'',process.env.CONTROL_PASSWORD||''])).digest():crypto.randomBytes(32),attempts=new Map(),revoked=new Map(),ttl=30*24*60*60*1000,renewAfter=24*60*60*1000;
  function token(role){const payload=role+'.'+Date.now()+'.'+crypto.randomBytes(16).toString('hex');return payload+'.'+crypto.createHmac('sha256',secret).update(payload).digest('hex')}
  function valid(value,role){for(const[k,t]of revoked)if(t<Date.now())revoked.delete(k);if(revoked.has(value))return false;if(typeof value!=='string'||value.length>240)return false;const parts=value.split('.');if(parts.length!==4||parts[0]!==role||!/^\d+$/.test(parts[1])||!/^[a-f0-9]{32}$/.test(parts[2])||!/^[a-f0-9]{64}$/.test(parts[3]))return false;const age=Date.now()-Number(parts[1]);if(age<0||age>ttl)return false;const sig=crypto.createHmac('sha256',secret).update(parts.slice(0,3).join('.')).digest();return crypto.timingSafeEqual(sig,Buffer.from(parts[3],'hex'))}
  function equal(a,b){return crypto.timingSafeEqual(crypto.createHash('sha256').update(String(a)).digest(),crypto.createHash('sha256').update(String(b)).digest())}
@@ -10,7 +11,10 @@ module.exports=function createGuard(){
   if(!['GET','HEAD','POST'].includes(req.method))return{status:405,error:'Mètode no permès'};
   if(req.method==='POST'){const host=String(req.headers['x-forwarded-host']||req.headers.host||'').split(',')[0].trim();if(req.headers['sec-fetch-site']==='cross-site')return{status:403,error:'Origen no permès'};if(req.headers.origin){try{if(new URL(req.headers.origin).host!==host)return{status:403,error:'Origen no permès'}}catch{return{status:403,error:'Origen no permès'}}}
    if(!String(req.headers['content-type']||'').toLowerCase().startsWith('application/json'))return{status:415,error:'Cal enviar JSON'};
-  }return null;
+  }
+  // Refresh only verified cookies; preserve role separation and never store passwords in the browser.
+  if(!String(req.url||'').split('?')[0].endsWith('/logout')){for(const[name,role]of [['openPoblaAdmin','admin'],['openPoblaControl','control']]){const match=String(req.headers.cookie||'').split(';').map(p=>p.trim()).find(p=>p.startsWith(name+'='));if(!match)continue;let value;try{value=decodeURIComponent(match.slice(name.length+1))}catch{continue}if(valid(value,role)&&Date.now()-Number(value.split('.')[1])>=renewAfter)cookie(req,res,name,token(role))}}
+  return null;
  }
  function key(req){return String(req.headers['x-forwarded-for']||req.socket.remoteAddress||'').split(',').at(-1).trim()}
  function limited(req){const k=key(req),now=Date.now();for(const[id,v]of attempts)if(v.until<now)attempts.delete(id);return(attempts.get(k)?.count||0)>=10}
