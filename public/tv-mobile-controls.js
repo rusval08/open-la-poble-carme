@@ -21,7 +21,7 @@
   return {card,bar,current,range,seek,isScrubbing:()=>scrubbing};
  });
  function update(){for(const {card,bar,current,range,seek,isScrubbing} of entries){
-  bar.hidden=!!card.querySelector('.cpool-dvr-player');
+  bar.hidden=!!card.querySelector('.cpool-dvr-player, .tv-video iframe');
   if(bar.hidden)continue;
   const video=current(),r=range(video),ready=!!video&&(video.readyState>=2||!!video.srcObject);
   seek.disabled=!r;if(r){seek.min=r.start;seek.max=r.end;if(!isScrubbing())seek.value=Math.max(r.start,Math.min(r.end,video.currentTime));const behind=Math.max(0,r.end-video.currentTime);seek.style.setProperty('--played',Math.max(0,Math.min(100,(Number(seek.value)-r.start)/(r.end-r.start||1)*100))+'%');seek.setAttribute('aria-valuetext',behind<5?'En directe':Math.round(behind)+' segons enrere');bar.querySelector('.tv-mobile-delay').textContent=behind<5?'Ara':'−'+Math.floor(behind/60)+':'+String(Math.floor(behind%60)).padStart(2,'0');bar.querySelector('button').classList.toggle('at-live',behind<5)}else bar.querySelector('.tv-mobile-delay').textContent=ready?'Directe':'En espera';
