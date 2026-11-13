@@ -20,9 +20,6 @@
     const r=await fetch('/api/production',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({table,patch:{dvr:false,mode:'live',autoFinish:false}})}),data=await r.json();
     if(!r.ok)throw Error(data.error||'No es pot preparar la càmera per al públic');
     if(!current())return;
-    const key=table===1?'youtubeVideoId':'youtubeVideoId2';
-    const saved=await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({[key]:''})});
-    if(!saved.ok)throw Error('No es pot seleccionar el vídeo de la càmera al públic');
     if(!current())return;prepared.set(table,stream);
    }
    if(current())window.CPoolCameraBroadcast.start(table);
