@@ -3,7 +3,7 @@
  window.CPoolSimpleCameras=true;document.body.classList.add('simple-camera-admin');
  let verified=false;const preparing=new Map(),prepared=new Map();
  const style=document.createElement('style');style.textContent=`
- .simple-camera-admin .dvr-admin,.simple-camera-admin #youtubeAdminPanel,.simple-camera-admin #admin-tv>.admin-workspace-heading,.simple-camera-admin .independent-launcher{display:none!important}
+ .simple-camera-admin .dvr-admin,.simple-camera-admin #youtubeAdminPanel,.simple-camera-admin #admin-tv>.admin-workspace-heading{display:none!important}
  .simple-camera-admin .broadcast-gate-panel>.broadcast-preview-link,.simple-camera-admin .broadcast-gate-panel>p:not(.broadcast-gate-message),.simple-camera-admin .broadcast-gate-panel .eyebrow{display:none!important}
  .simple-camera-admin .production-camera>:not(.production-camera-header):not(.production-preview):not(.tv-usb-panel):not(.live-broadcast-controls){display:none!important}
  .simple-camera-admin .production-preview-tools,.simple-camera-admin .tv-usb-panel>summary,.simple-camera-admin .tv-usb-stop,.simple-camera-admin .tv-usb-note,.simple-camera-admin .production-on-air,.simple-camera-admin .production-heading a,.simple-camera-admin .production-heading p,.simple-camera-admin .live-broadcast-controls>button,.simple-camera-admin .live-broadcast-controls>.production-note{display:none!important}
