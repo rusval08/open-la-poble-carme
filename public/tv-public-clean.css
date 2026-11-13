@@ -1,0 +1,25 @@
+/* Public TV: two camera feeds with their existing live scoreboards. */
+.tv-directe-body{background:#080e13}
+.tv-public-header{display:flex;align-items:center;justify-content:flex-start;gap:14px;padding:10px 16px;min-height:44px;box-sizing:border-box;border-bottom:1px solid #26323c}
+.tv-public-header>a{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;color:#e5edf2;text-decoration:none;font-size:24px}
+.tv-public-header>strong{font:600 14px Arial,sans-serif;color:#dce4e9}
+.tv-directe-body .tv-live-title,.tv-directe-body .public-table-expand,.tv-directe-body .tv-two-shell>.public-switch-link{display:none}
+.tv-directe-body:not(.tv-immersive) .tv-two-shell{width:100%;max-width:1800px;margin:0 auto;padding:12px;box-sizing:border-box}
+.tv-directe-body .tv-two-grid{gap:12px}
+.tv-directe-body .tv-camera-card{padding:8px;border:1px solid #25313a;border-radius:0;background:#0d151c;min-width:0}
+.tv-directe-body .tv-camera-card>h3{font:600 13px Arial,sans-serif;margin:0 0 8px;color:#d8e0e5;text-align:left}
+.tv-directe-body .tv-video{margin:0;border-radius:0;aspect-ratio:16/9;overflow:hidden;background:#000}
+.tv-directe-body .tv-video-container{position:relative;width:100%;height:100%;aspect-ratio:16/9}
+.tv-directe-body .tv-video-container>.tv-usb-video{width:100%;height:100%;object-fit:contain}
+.tv-directe-body .tv-live-status{font-size:11px;line-height:1.35;margin:6px 0;color:#a4b1bc}
+.tv-directe-body .tv-camera-card[data-broadcast="live"]>.tv-live-score{display:none}
+.tv-directe-body .tv-live-score{margin:6px 0 0;padding:8px;gap:8px}
+.tv-directe-body .tv-live-score article h3{font-size:13px}
+.tv-directe-body .tv-live-score>strong{font-size:22px}
+.tv-directe-body .tv-live-score article>span{display:none}
+.tv-directe-body .tv-video-waiting h3{font-size:16px}
+.tv-directe-body .tv-video-waiting p{font-size:12px}
+.tv-directe-body .global-logo{display:none!important}
+@media(min-width:760px){.tv-directe-body:not(.tv-single-table) .tv-two-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media(max-width:759px){.tv-directe-body:not(.tv-immersive) .tv-two-shell{padding:8px}.tv-directe-body .tv-two-grid{grid-template-columns:minmax(0,1fr);gap:8px}.tv-public-header{padding:5px 8px}.tv-directe-body .tv-camera-card{padding:6px}}
+.tv-immersive .tv-public-header{display:none!important}

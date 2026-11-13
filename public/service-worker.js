@@ -1,4 +1,4 @@
-const CACHE_NAME='cpool-public-app-v62-youtube-emitter-setup';
+const CACHE_NAME='cpool-public-app-v63-public-video-stable';
 const PAGES=new Set(['/resultats','/resultats.html','/quadrant','/quadrant.html','/estadistiques','/estadistiques.html','/historial.html','/enfrontaments.html','/pantalla.html','/tv-directe.html','/tv-table','/tv-table.html','/instal-lar.html','/offline.html']);
 const CORE=['/app-polish.css?v=20261109-1','/mobile.css?v=20261106-1','/offline.html','/resultats','/styles.css','/resultats-theme.css','/resultats.js','/connection.js?v=20261106-1','/connection.css?v=20261106-1','/logo.js','/pwa.js','/cpool-logo.png','/manifest.webmanifest'];
 const PRIVATE=new Set(['/admin-workspace.js','/sponsor-screen-admin.js','/broadcast-admin.js','/admin.js','/app.js','/server-guard.js','/live-relay-server.js','/championship-backup.js','/production-admin.js','/operations-admin.js','/quadrant-control.js','/jugadors.js']);
