@@ -1,12 +1,13 @@
 (function(){
  'use strict';const main=document.querySelector('.admin-layout');if(!main)return;
  const panel=document.createElement('section');panel.className='broadcast-gate-panel';
- panel.innerHTML='<div><p class="eyebrow">VISIBILITAT DE LES DUES TV TABLE</p><h2>Pantalles del públic</h2><p class="broadcast-gate-state" role="status">Comprovant l’estat…</p></div><p>Fes les proves amb les pantalles públiques tancades. L’administrador pot continuar previsualitzant les càmeres.</p><a class="broadcast-preview-link" href="/tv-directe.html?preview=admin" target="_blank" rel="noopener">Obrir previsualització d’administrador ↗</a><button type="button" class="broadcast-gate-toggle">Activar les pantalles del públic</button><form class="broadcast-pin-form" hidden><label>PIN de seguretat<input type="password" minlength="1" maxlength="128" autocomplete="off" required></label><div><button type="submit">Confirmar</button><button type="button" class="broadcast-gate-cancel">Cancel·lar</button></div></form><p class="broadcast-gate-message" role="alert"></p>';
+ panel.innerHTML='<div><p class="eyebrow">VISIBILITAT DE LES DUES TV TABLE</p><h2>Càmeres al públic</h2><p class="broadcast-gate-state" role="status">Comprovant l’estat…</p></div><p>Fes les proves amb les pantalles públiques tancades. L’administrador pot continuar previsualitzant les càmeres.</p><a class="broadcast-preview-link" href="/tv-directe.html?preview=admin" target="_blank" rel="noopener">Obrir previsualització d’administrador ↗</a><button type="button" class="broadcast-gate-toggle">Activar càmeres al públic</button><form class="broadcast-pin-form" hidden><label>PIN de seguretat<input type="password" minlength="1" maxlength="128" autocomplete="off" required></label><div><button type="submit">Confirmar</button><button type="button" class="broadcast-gate-cancel">Cancel·lar</button></div></form><p class="broadcast-gate-message" role="alert"></p>';
  main.prepend(panel);const button=panel.querySelector('.broadcast-gate-toggle'),form=panel.querySelector('form'),pin=form.querySelector('input'),message=panel.querySelector('[role=alert]');let state=null,requested=null,busy=false,expired=false,inflight=null,timer,messageKind='';
  function show(next){
   document.querySelectorAll('a[href^="/tv-directe.html"]').forEach(a=>{const u=new URL(a.href);u.searchParams.set('preview','admin');a.href=u.href});
   state=next;panel.dataset.open=String(next.open);panel.querySelector('.broadcast-gate-state').textContent=next.open?'PÚBLIC OBERT · Les dues TV Table són visibles':'PÚBLIC TANCAT · Proves privades de l’administrador';
-  button.textContent=next.open?'Tancar les pantalles del públic':'Activar les pantalles del públic';button.disabled=busy;
+  window.dispatchEvent(new CustomEvent('cpool-admin-public-gate',{detail:next}));
+  button.textContent=next.open?'Desactivar càmeres del públic':'Activar càmeres al públic';button.disabled=busy;
   document.querySelectorAll('.live-publish').forEach(b=>b.textContent=next.open?'Emetre USB al públic':'Iniciar emissió de prova privada');
  }
  async function refresh(){
