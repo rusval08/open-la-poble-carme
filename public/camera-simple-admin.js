@@ -1,7 +1,7 @@
 (function(){
  'use strict';if(!document.body.classList.contains('admin-body'))return;
  window.CPoolSimpleCameras=true;document.body.classList.add('simple-camera-admin');
- let open=null,epoch=0;const preparing=new Map(),prepared=new Set();
+ let verified=false;const preparing=new Map(),prepared=new Map();
  const style=document.createElement('style');style.textContent=`
  .simple-camera-admin .dvr-admin,.simple-camera-admin #youtubeAdminPanel,.simple-camera-admin #admin-tv>.admin-workspace-heading,.simple-camera-admin .independent-launcher{display:none!important}
  .simple-camera-admin .broadcast-gate-panel>.broadcast-preview-link,.simple-camera-admin .broadcast-gate-panel>p:not(.broadcast-gate-message),.simple-camera-admin .broadcast-gate-panel .eyebrow{display:none!important}
@@ -11,28 +11,29 @@
  `;document.head.append(style);
  function note(table,text){const card=document.querySelector('.production-camera[data-table="'+table+'"]');const status=card?.querySelector('.live-broadcast-status');if(status)status.textContent=text}
  async function start(table){
-  if(open!==true||!window.CPoolCameraBroadcast||!window.AdminCameraPreview?.stream(table)?.getVideoTracks().some(t=>t.readyState==='live'))return;
+  const stream=window.AdminCameraPreview?.stream(table);
+  if(!verified||!window.CPoolCameraBroadcast||!stream?.getVideoTracks().some(t=>t.readyState==='live'))return;
   if(preparing.has(table)||window.CPoolCameraBroadcast.wanted(table))return;
-  const version=epoch,job={};preparing.set(table,job);
+  const job={};preparing.set(table,job);const current=()=>window.AdminCameraPreview?.stream(table)===stream&&stream.getVideoTracks().some(t=>t.readyState==='live');
   try{
-   if(!prepared.has(table)){
+   if(prepared.get(table)!==stream){
     const r=await fetch('/api/production',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({table,patch:{dvr:false,mode:'live',autoFinish:false}})}),data=await r.json();
     if(!r.ok)throw Error(data.error||'No es pot preparar la càmera per al públic');
-    if(open!==true||version!==epoch)return;
+    if(!current())return;
     const key=table===1?'youtubeVideoId':'youtubeVideoId2';
     const saved=await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({[key]:''})});
     if(!saved.ok)throw Error('No es pot seleccionar el vídeo de la càmera al públic');
-    if(open!==true||version!==epoch)return;prepared.add(table);
+    if(!current())return;prepared.set(table,stream);
    }
-   if(open===true&&version===epoch)window.CPoolCameraBroadcast.start(table);
-  }catch(error){note(table,error.message)}finally{if(preparing.get(table)===job)preparing.delete(table)}
+   if(current())window.CPoolCameraBroadcast.start(table);
+  }catch(error){note(table,error.message)}finally{if(preparing.get(table)===job){preparing.delete(table);if(window.AdminCameraPreview?.stream(table)!==stream)start(table)}}
  }
  function gate(next){
   if(typeof next?.open!=='boolean')return;
-  if(open!==next.open){open=next.open;epoch++;prepared.clear()}
-  if(open){for(const table of [1,2])start(table)}else for(const table of [1,2]){window.CPoolCameraBroadcast?.stop(table);note(table,'Càmera privada · El públic no rep el vídeo')}
+  verified=true;for(const table of [1,2])start(table);
  }
  window.addEventListener('cpool-admin-public-gate',event=>gate(event.detail));
+ window.addEventListener('cpool-preview-stopped',event=>prepared.delete(Number(event.detail.table)));
  window.addEventListener('cpool-preview-ready',event=>{const table=Number(event.detail.table);if([1,2].includes(table)){prepared.delete(table);start(table)}});
  function mount(){
   const host=document.querySelector('#admin-tv'),gatePanel=document.querySelector('.broadcast-gate-panel');
