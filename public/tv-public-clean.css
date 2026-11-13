@@ -1,8 +1,13 @@
 /* Public TV: two camera feeds with their existing live scoreboards. */
-.tv-directe-body{background:#080e13}
+.tv-directe-body{background:#080e13!important;background-image:none!important}
 .tv-public-header{display:flex;align-items:center;justify-content:flex-start;gap:14px;padding:10px 16px;min-height:44px;box-sizing:border-box;border-bottom:1px solid #26323c}
 .tv-public-header>a{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;color:#e5edf2;text-decoration:none;font-size:24px}
 .tv-public-header>strong{font:600 14px Arial,sans-serif;color:#dce4e9}
+.tv-directe-body .tv-public-header{height:auto!important;min-height:48px!important;padding:4px 10px!important;justify-content:flex-start!important;gap:12px!important}
+.tv-directe-body .tv-orientation-label,.tv-directe-body .tv-orientation-toolbar>a{display:none!important}
+.tv-directe-body .tv-orientation-toolbar{min-height:0;padding:0 0 8px;gap:6px}
+.tv-directe-body .tv-orientation-toolbar>button{min-height:32px;padding:5px 10px;font-size:12px}
+.tv-directe-body:not(.tv-immersive) .tv-mobile-transport{display:none!important}
 .tv-directe-body .tv-live-title,.tv-directe-body .public-table-expand,.tv-directe-body .tv-two-shell>.public-switch-link{display:none}
 .tv-directe-body:not(.tv-immersive) .tv-two-shell{width:100%;max-width:1800px;margin:0 auto;padding:12px;box-sizing:border-box}
 .tv-directe-body .tv-two-grid{gap:12px}
