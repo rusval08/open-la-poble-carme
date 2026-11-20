@@ -183,15 +183,14 @@ async function refreshResults() {
   }).then((response) => response.json());
   applyState(nextState);
 }
-async function initResults() {
-  await refreshResults();
+function initResults() {
+  const refresh = () => refreshResults().catch(() => {});
+  setInterval(refresh, 2000);
+  refresh();
   const events = new EventSource("/api/events");
   events.onmessage = (event) => {
     applyState(JSON.parse(event.data));
   };
-  events.onerror = () => {
-    refreshResults();
-  };
-  setInterval(refreshResults, 2000);
+  events.onerror = refresh;
 }
 initResults();
