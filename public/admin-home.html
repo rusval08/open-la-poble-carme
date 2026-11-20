@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#061525">
+  <meta name="apple-mobile-web-app-title" content="CPool Admin">
+  <title>CPool Admin</title>
+  <link rel="manifest" href="/admin.webmanifest">
+  <link rel="apple-touch-icon" href="/cpool-logo.png">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #061525; color: #fff; font-family: Georgia, serif; }
+    main { max-width: 560px; margin: auto; }
+    h1 { margin: 0; padding: calc(28px + env(safe-area-inset-top)) 8% 10px; font-size: clamp(2.15rem, 8.7vw, 3.4rem); font-weight: 400; }
+    h1::after { content: ""; display: block; width: 22%; height: 2px; margin-top: 14px; background: linear-gradient(90deg, #d5dce2, transparent); }
+    .hero { aspect-ratio: 1.12; background: linear-gradient(0deg, #061525, transparent 23%), url("/admin-billar.webp") center 31% / 100% auto no-repeat; }
+    nav { margin: 0 5%; padding-bottom: env(safe-area-inset-bottom); }
+    a { display: grid; grid-template-columns: 2.8em 1fr auto; gap: .65em; align-items: center; min-height: 72px; padding: 8px .3em; color: inherit; font-size: clamp(1.45rem, 6.4vw, 2.1rem); text-decoration: none; }
+    a + a { border-top: 1px solid #a2b1bd80; }
+    a:focus-visible { outline: 2px solid #c9e9ff; outline-offset: -2px; }
+    .symbol { color: #cbd5de; border-right: 1px solid #a2b1bd80; text-align: center; line-height: 1.35; }
+    .arrow { color: #cbd5de; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>CPool Admin</h1>
+    <div class="hero" aria-hidden="true"></div>
+    <nav aria-label="Administració del torneig">
+      <a href="/control"><span class="symbol" aria-hidden="true">▣</span>Marcadors<span class="arrow" aria-hidden="true">→</span></a>
+      <a href="/quadrant-control"><span class="symbol" aria-hidden="true">┫</span>Quadrant<span class="arrow" aria-hidden="true">→</span></a>
+    </nav>
+  </main>
+</body>
+</html>

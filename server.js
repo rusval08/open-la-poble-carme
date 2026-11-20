@@ -272,7 +272,7 @@ function sendUnauthorized(res) {
   sendJson(res, 401, { error: "Cal iniciar sessió com administrador" });
 }
 function isAdminProtectedPage(urlPath) {
-  return ["/admin.html", "/quadrant-admin.html", "/jugadors.html", "/gravacions.html"].includes(
+  return ["/admin.html", "/admin-home.html", "/quadrant-admin.html", "/jugadors.html", "/gravacions.html"].includes(
     urlPath,
   );
 }
@@ -1244,7 +1244,8 @@ function restorePendingFinishes() {
 
 function serveStatic(req, res) {
   let urlPath;try{urlPath=decodeURIComponent(new URL(req.url,'http://localhost').pathname)}catch{sendJson(res,400,{error:'Adreça no vàlida'});return}
-  if (urlPath === "/" || urlPath === "/admin") urlPath = "/admin.html";
+  if (urlPath === "/") urlPath = "/admin.html";
+  if (urlPath === "/admin") urlPath = "/admin-home.html";
   if (urlPath === "/control") urlPath = "/index.html";
   if (urlPath === "/login") urlPath = "/login.html";
   if (["/control-login", "/control-login.html"].includes(urlPath)) {
