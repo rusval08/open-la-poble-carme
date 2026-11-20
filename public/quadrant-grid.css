@@ -46,3 +46,12 @@
 .quadrant-player-picker label { color: #fff; }
 .quadrant-player-choices { display: grid; gap: 5px; margin-block: 8px; }
 .quadrant-player-choices button { text-align: left; }
+
+.quadrant-footer {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 0 12px 16px;
+}
+.quadrant-control-page .cpool-connection[data-connection="live"] {
+  display: none;
+}
