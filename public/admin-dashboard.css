@@ -1,0 +1,64 @@
+.admin-body .admin-layout[data-workspace="ready"] {
+  max-width: 1450px;
+  margin-inline: auto;
+}
+.admin-body #admin-home {
+  --dashboard-panel: #102722;
+  --dashboard-line: #345148;
+  --dashboard-text: #edf7f1;
+  --dashboard-muted: #b8cdc5;
+}
+.admin-body #admin-home .admin-shortcut,
+.admin-scorecards article,
+.admin-camera-cards a {
+  background: var(--dashboard-panel);
+  border: 1px solid var(--dashboard-line);
+  border-radius: 12px;
+  color: var(--dashboard-text);
+}
+.admin-body #admin-home .admin-shortcut {
+  border-inline-start: 3px solid #75d4ae;
+  min-height: 72px;
+}
+.admin-scorecards, .admin-camera-cards {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 215px), 1fr));
+}
+.admin-scorecards { margin-top: 16px; }
+.admin-scorecards article, .admin-camera-cards a { padding: 14px; }
+.admin-scorecards h3 { margin: 0 0 8px; font-size: 1rem; }
+.admin-scorecards article div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding-block: 4px;
+}
+.admin-scorecards span { overflow-wrap: anywhere; }
+.admin-scorecards strong { color: #a0f0cc; font-variant-numeric: tabular-nums; }
+.admin-camera-cards a { display: grid; gap: 6px; text-decoration: none; }
+.admin-camera-cards span { color: var(--dashboard-muted); font-size: .9rem; }
+.admin-camera-cards a:focus-visible, .admin-shortcut:focus-visible {
+  outline: 2px solid #a0f0cc;
+  outline-offset: 3px;
+}
+.admin-body .admin-workspace-nav {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  background: #0d201c;
+  border: 1px solid #345148;
+  border-radius: 12px;
+  gap: 4px;
+}
+.admin-body .admin-workspace-nav button {
+  border-radius: 8px;
+  color: #d1e4db;
+}
+.admin-body .admin-workspace-nav button[aria-selected="true"] {
+  background: #b7ebd2;
+  color: #102722;
+}
+@media (max-width: 500px) {
+  .admin-body .admin-workspace-nav button { padding-inline: 4px; }
+}
