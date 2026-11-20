@@ -22,7 +22,8 @@ const instanceId=crypto.randomBytes(12).toString('hex');let stateVersion=0;
 const clients = new Set();
 const pendingFinishTimers = new Map();
 let lastBackupAt = 0;
-const SCOREBOARD_COUNT = 6;
+const SCOREBOARD_COUNT = 8;
+const LEGACY_SCOREBOARD_COUNT = 6;
 const PLAYER_COUNT = 128;
 const RECTIFICATION_MS = 20000;
 const DEFAULT_TOURNAMENT_NAME = "Open la Pobla";
@@ -119,12 +120,9 @@ function writeBackupSnapshot(payload) {
     console.error("No s'ha pogut crear backup:", error.message);
   }
 }
-const state = {
-  settings: {
-    tournamentName: DEFAULT_TOURNAMENT_NAME,
-    winTarget: DEFAULT_WIN_TARGET,
-  },
-  scoreboards: Array.from({ length: SCOREBOARD_COUNT }, (_, index) => ({
+
+function defaultScoreboard(index) {
+  return {
     id: index + 1,
     title: `Taula ${index + 1}`,
     winTarget: null,
@@ -137,8 +135,16 @@ const state = {
     status: "Preparat",
     locked: false,
     rectificationEndsAt: "",
-    theme: ["red", "blue", "green", "amber", "violet", "cyan"][index],
-  })),
+    theme: ["red", "blue", "green", "amber", "violet", "cyan", "green", "amber"][index],
+  };
+}
+
+const state = {
+  settings: {
+    tournamentName: DEFAULT_TOURNAMENT_NAME,
+    winTarget: DEFAULT_WIN_TARGET,
+  },
+  scoreboards: Array.from({ length: SCOREBOARD_COUNT }, (_, index) => defaultScoreboard(index)),
   players: defaultPlayers(),
   bracketManual: defaultBracketManual(),
 };
@@ -831,7 +837,7 @@ function validateBackup(bundle) {
     !Array.isArray(input.players) ||
     input.players.length !== 128 ||
     !Array.isArray(input.scoreboards) ||
-    input.scoreboards.length !== 6 ||
+    ![LEGACY_SCOREBOARD_COUNT, SCOREBOARD_COUNT].includes(input.scoreboards.length) ||
     !input.bracketManual
   )
     throw bracketError(400, "La còpia és incompleta");
@@ -860,27 +866,30 @@ function validateBackup(bundle) {
       next.score = text(next.score, 40);
       if (next.winner && ![next.top, next.bottom].includes(next.winner))
         throw bracketError(400, "Guanyador invàlid a la còpia");
-      if (next.table && !/^[1-6]$/.test(next.table))
+      if (next.table && !state.scoreboards.some((board) => String(board.id) === next.table))
         throw bracketError(400, "Taula invàlida a la còpia");
       return next;
     });
   }
-  const scoreboards = input.scoreboards.map((b, index) => ({
-    ...state.scoreboards[index],
-    id: index + 1,
-    title: text(b.title) || "Taula " + (index + 1),
-    winTarget: b.winTarget == null ? null : normalizeWinTarget(b.winTarget),
-    homeName: text(b.homeName) || "JUGADOR LOCAL",
-    awayName: text(b.awayName) || "JUGADOR VISITANT",
-    homeScore: Math.min(normalizeWinTarget(b.winTarget ?? target), Math.max(0, Number(b.homeScore) || 0)),
-    awayScore: Math.min(normalizeWinTarget(b.winTarget ?? target), Math.max(0, Number(b.awayScore) || 0)),
-    period: text(b.period, 10),
-    clock: text(b.clock, 10),
-    status: text(b.status),
-    locked: Boolean(b.locked),
-    rectificationEndsAt: text(b.rectificationEndsAt, 40),
-    theme: ["red", "blue", "green", "amber", "violet", "cyan"][index],
-  }));
+  const scoreboards = Array.from({ length: SCOREBOARD_COUNT }, (_, index) => {
+    const defaults = defaultScoreboard(index);
+    const b = input.scoreboards[index] || defaults;
+    return {
+      ...defaults,
+      id: index + 1,
+      title: text(b.title) || "Taula " + (index + 1),
+      winTarget: b.winTarget == null ? null : normalizeWinTarget(b.winTarget),
+      homeName: text(b.homeName) || "JUGADOR LOCAL",
+      awayName: text(b.awayName) || "JUGADOR VISITANT",
+      homeScore: Math.min(normalizeWinTarget(b.winTarget ?? target), Math.max(0, Number(b.homeScore) || 0)),
+      awayScore: Math.min(normalizeWinTarget(b.winTarget ?? target), Math.max(0, Number(b.awayScore) || 0)),
+      period: text(b.period, 10),
+      clock: text(b.clock, 10),
+      status: text(b.status),
+      locked: Boolean(b.locked),
+      rectificationEndsAt: text(b.rectificationEndsAt, 40),
+    };
+  });
   const assets = bundle.assets.map((asset) => {
     const match = /^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+/=]+)$/.exec(
       asset.image || "",
