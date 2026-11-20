@@ -14,6 +14,7 @@ let resultsState = {
   scoreboards: [],
 };
 let previousScores = new Map();
+const otherScoreHighlights = new Map();
 let previousWinners = new Map();
 let hasRenderedResults = false;
 let lastStateText = "";
@@ -79,6 +80,25 @@ function renderTvTables() {
   }
 }
 
+function renderOtherScore(board, side, now) {
+  const score = board[side + "Score"];
+  const previous = previousScores.get(board.id);
+  let highlights = otherScoreHighlights.get(board.id);
+  if (!previous || !highlights || previous.homeName !== board.homeName || previous.awayName !== board.awayName) {
+    highlights = {};
+    otherScoreHighlights.set(board.id, highlights);
+  } else if (score > previous[side + "Score"]) {
+    highlights[side] = now + 5000;
+  } else if (score < previous[side + "Score"]) {
+    delete highlights[side];
+  }
+  const remaining = (highlights[side] ?? 0) - now;
+  const span = remaining > 0
+    ? '<span class="results-point-highlight" style="animation-duration:' + remaining + 'ms">'
+    : "<span>";
+  return span + window.CPoolEscape(score) + "</span>";
+}
+
 function renderResults() {
   tournamentNameElements.forEach((element) => {
     element.textContent =
@@ -96,9 +116,10 @@ function renderResults() {
     const otherTables = document.querySelector("#otherTables");
     if (otherTables) {
       const escape = window.CPoolEscape;
+      const now = performance.now();
       otherTables.innerHTML = resultsState.scoreboards
         .filter(board => ![1, 2].includes(Number(board.id)))
-        .map(board => `<div class="results-table-row" id="taula-${escape(board.id)}"><span>${escape(board.title)}</span><span>${escape(board.homeName)} – ${escape(board.awayName)}</span><strong>${escape(board.homeScore)} – ${escape(board.awayScore)}</strong></div>`)
+        .map(board => `<div class="results-table-row" id="taula-${escape(board.id)}"><span>${escape(board.title)}</span><span>${escape(board.homeName)} – ${escape(board.awayName)}</span><strong>${renderOtherScore(board, "home", now)} – ${renderOtherScore(board, "away", now)}</strong></div>`)
         .join("") || "<p>Encara no hi ha resultats.</p>";
     }
   }
@@ -117,7 +138,7 @@ function renderResults() {
   previousScores = new Map(
     resultsState.scoreboards.map((board) => [
       board.id,
-      { homeScore: board.homeScore, awayScore: board.awayScore },
+      { homeScore: board.homeScore, awayScore: board.awayScore, homeName: board.homeName, awayName: board.awayName },
     ]),
   );
   previousWinners = new Map(

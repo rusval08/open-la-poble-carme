@@ -328,3 +328,13 @@ body.tv-directe-body.results-tv-embed .tv-video {
   width: 21%;
   background: #fff url("/patrocinadors-20261102.jpg") 97% 3.7% / 581% 466% no-repeat;
 }
+
+.results-point-highlight {
+  animation: results-point-green 5s linear;
+}
+@keyframes results-point-green {
+  from, to {
+    color: #86f9a5;
+    text-shadow: 0 0 8px #32c968;
+  }
+}
