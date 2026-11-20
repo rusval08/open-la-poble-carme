@@ -316,12 +316,12 @@ body.tv-directe-body.results-tv-embed .tv-video {
   width: 33%;
   display: grid;
   place-items: stretch center;
-  background: #0b111d;
+  background: #fff;
 }
 .results-sponsor-vrp::before {
   content: "";
-  width: 57%;
-  background: url("/vrp-propostes.webp") 42.5% 91.5% / 398% 255% no-repeat;
+  width: 100%;
+  background: url("/vrp-blanc.webp") center / auto 100% no-repeat;
 }
 .results-sponsor-hotel {
   right: 1.2%;
