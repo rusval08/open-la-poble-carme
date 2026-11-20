@@ -1,0 +1,14 @@
+{
+  "id": "/carme-8-pool-admin",
+  "name": "Carme 8 Pool · Administració",
+  "short_name": "CPool Admin",
+  "lang": "ca",
+  "start_url": "/admin",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0c171b",
+  "theme_color": "#0c171b",
+  "icons": [
+    { "src": "/cpool-logo.png", "sizes": "1254x1254", "type": "image/png", "purpose": "any" }
+  ]
+}
