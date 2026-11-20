@@ -64,6 +64,8 @@ function renderTvTables() {
     const frame = video.querySelector("iframe");
     const open = resultsState.settings?.publicBroadcast?.open === true;
     video.querySelector("p").hidden = open;
+    card.querySelector(".results-tv-status").textContent = open ? "En directe" : "Sense emissió";
+    card.classList.toggle("broadcast-open", open);
     if (!open) {
       frame?.remove();
     } else if (!frame) {
@@ -90,6 +92,16 @@ function renderResults() {
   });
   renderLiveNow();
   renderTvTables();
+  if (!largeResults) {
+    const otherTables = document.querySelector("#otherTables");
+    if (otherTables) {
+      const escape = window.CPoolEscape;
+      otherTables.innerHTML = resultsState.scoreboards
+        .filter(board => ![1, 2].includes(Number(board.id)))
+        .map(board => `<div class="results-table-row" id="taula-${escape(board.id)}"><span>${escape(board.title)}</span><span>${escape(board.homeName)} – ${escape(board.awayName)}</span><strong>${escape(board.homeScore)} – ${escape(board.awayScore)}</strong></div>`)
+        .join("") || "<p>Encara no hi ha resultats.</p>";
+    }
+  }
   resultsGrid.innerHTML = resultsState.scoreboards
     .filter(board => largeResults || tvCards.length === 0 || ![1, 2].includes(Number(board.id)))
     .map((board) => {
@@ -99,7 +111,7 @@ function renderResults() {
         hasRenderedResults && previous && board.homeScore > previous.homeScore;
       const awayRaised =
         hasRenderedResults && previous && board.awayScore > previous.awayScore;
-      return `<article class="result-card theme-${window.CPoolEscape(board.theme)}"><span id="taula-${window.CPoolEscape(board.id)}" class="anchor-target"></span><div class="result-title"><span>${window.CPoolEscape(board.title)}</span><small>${winner ? "Final" : `A ${winTarget(board)}`}</small></div><div class="result-score"><div class="result-player ${homeRaised ? "player-flash" : ""}"><strong>${window.CPoolEscape(board.homeName)}</strong><span class="${homeRaised ? "score-flash" : ""}">${board.homeScore}</span></div><div class="result-divider">-</div><div class="result-player right ${awayRaised ? "player-flash" : ""}"><strong>${window.CPoolEscape(board.awayName)}</strong><span class="${awayRaised ? "score-flash" : ""}">${board.awayScore}</span></div></div><div class="result-winner">${winner ? `Guanya: ${window.CPoolEscape(winner)}` : `Partit a ${winTarget(board)} guanyades`}</div></article>`;
+      return `<article class="result-card theme-${window.CPoolEscape(board.theme)}">${largeResults ? `<span id="taula-${window.CPoolEscape(board.id)}" class="anchor-target"></span>` : ""}<div class="result-title"><span>${window.CPoolEscape(board.title)}</span><small>${winner ? "Final" : `A ${winTarget(board)}`}</small></div><div class="result-score"><div class="result-player ${homeRaised ? "player-flash" : ""}"><strong>${window.CPoolEscape(board.homeName)}</strong><span class="${homeRaised ? "score-flash" : ""}">${board.homeScore}</span></div><div class="result-divider">-</div><div class="result-player right ${awayRaised ? "player-flash" : ""}"><strong>${window.CPoolEscape(board.awayName)}</strong><span class="${awayRaised ? "score-flash" : ""}">${board.awayScore}</span></div></div><div class="result-winner">${winner ? `Guanya: ${window.CPoolEscape(winner)}` : `Partit a ${winTarget(board)} guanyades`}</div></article>`;
     })
     .join("");
   previousScores = new Map(
