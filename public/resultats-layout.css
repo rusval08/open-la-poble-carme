@@ -303,11 +303,28 @@ body.tv-directe-body.results-tv-embed .tv-video {
   display: block;
   position: relative;
 }
-.results-sponsor-vrp {
+/* The top row of the sponsor poster ends at pixel 101 of 382. */
+.results-sponsor-vrp,
+.results-sponsor-hotel {
   position: absolute;
-  inset: 0.8% auto auto 52%;
-  width: 14%;
-  height: 24.3%;
-  border-radius: 5%;
-  background: #0b111d url("/vrp-propostes.webp") 42.5% 93.1% / 398% 255% no-repeat;
+  top: 0.8%;
+  height: 25.4%;
+  border-radius: 5px;
+}
+.results-sponsor-vrp {
+  left: 43%;
+  width: 33%;
+  display: grid;
+  place-items: stretch center;
+  background: #0b111d;
+}
+.results-sponsor-vrp::before {
+  content: "";
+  width: 57%;
+  background: url("/vrp-propostes.webp") 42.5% 91.5% / 398% 255% no-repeat;
+}
+.results-sponsor-hotel {
+  right: 1.2%;
+  width: 21%;
+  background: #fff url("/patrocinadors-20261102.jpg") 97% 3.7% / 581% 466% no-repeat;
 }
