@@ -1,8 +1,8 @@
 (function(){
  'use strict';const main=document.querySelector('.admin-layout');if(!main)return;
  const panel=document.createElement('section');panel.className='broadcast-gate-panel';
- panel.innerHTML='<div><p class="eyebrow">VISIBILITAT DE LES DUES TV TABLE</p><h2>Accés del públic a les càmeres</h2><p class="broadcast-gate-state" role="status">Comprovant l’estat…</p></div><p>Fes les proves amb les pantalles públiques tancades. L’administrador pot continuar previsualitzant les càmeres.</p><a class="broadcast-preview-link" href="/tv-directe.html?preview=admin" target="_blank" rel="noopener">Obrir previsualització d’administrador ↗</a><button type="button" class="broadcast-gate-toggle">Donar accés al públic</button><form class="broadcast-pin-form" hidden><label>PIN de seguretat<input type="password" minlength="1" maxlength="128" autocomplete="off" required></label><div><button type="submit">Confirmar</button><button type="button" class="broadcast-gate-cancel">Cancel·lar</button></div></form><p class="broadcast-gate-message" role="alert"></p>';
- main.prepend(panel);const button=panel.querySelector('.broadcast-gate-toggle'),form=panel.querySelector('form'),pin=form.querySelector('input'),message=panel.querySelector('[role=alert]');let state=null,requested=null,busy=false,expired=false,inflight=null,timer,messageKind='';
+ panel.innerHTML='<div><p class="eyebrow">VISIBILITAT DE LES DUES TV TABLE</p><h2>Accés del públic a les càmeres</h2><p class="broadcast-gate-state" role="status">Comprovant l’estat…</p></div><p>Fes les proves amb les pantalles públiques tancades. L’administrador pot continuar previsualitzant les càmeres.</p><a class="broadcast-preview-link" href="/tv-directe.html?preview=admin" target="_blank" rel="noopener">Obrir previsualització d’administrador ↗</a><button type="button" class="broadcast-gate-toggle">Donar accés al públic</button><form class="broadcast-pin-form" hidden><div><button type="submit">Confirmar</button><button type="button" class="broadcast-gate-cancel">Cancel·lar</button></div></form><p class="broadcast-gate-message" role="alert"></p>';
+ main.prepend(panel);const button=panel.querySelector('.broadcast-gate-toggle'),form=panel.querySelector('form'),message=panel.querySelector('[role=alert]');let state=null,requested=null,busy=false,expired=false,inflight=null,timer,messageKind='';
  function show(next){
   document.querySelectorAll('a[href^="/tv-directe.html"]').forEach(a=>{const u=new URL(a.href);u.searchParams.set('preview','admin');a.href=u.href});
   state=next;panel.dataset.open=String(next.open);panel.querySelector('.broadcast-gate-state').textContent=next.open?'PÚBLIC OBERT · Les dues TV Table són visibles':'PÚBLIC TANCAT · Les càmeres continuen privades';
@@ -17,7 +17,7 @@
     const r=await fetch('/api/broadcast-visibility',{cache:'no-store',signal:AbortSignal.timeout(12000)});
     if(!r.ok)throw Error('No es pot comprovar la connexió. Prem el botó per reintentar-ho.');
     const data=await r.json();
-    if(data.adminPreview!==true){expired=true;requested=null;pin.value='';form.hidden=true;button.textContent='Tornar a iniciar sessió';button.disabled=false;messageKind='connection';message.textContent='La sessió d’administrador ha caducat. Prem el botó per tornar a entrar.';return false}
+    if(data.adminPreview!==true){expired=true;requested=null;form.hidden=true;button.textContent='Tornar a iniciar sessió';button.disabled=false;messageKind='connection';message.textContent='La sessió d’administrador ha caducat. Prem el botó per tornar a entrar.';return false}
     expired=false;show(data);if(messageKind==='connection'){message.textContent='';messageKind=''}return true;
    }catch(e){
     messageKind='connection';message.textContent=e.name==='TimeoutError'?'La connexió tarda a respondre. Prem el botó per reintentar-ho.':e.message;
@@ -29,16 +29,16 @@
  button.addEventListener('click',async()=>{
   if(busy)return;button.setAttribute('aria-busy','true');const ready=await refresh();button.setAttribute('aria-busy','false');
   if(!ready){if(expired)location.href='/login?next=%2Fadmin';return}
-  requested={open:!state.open,revision:state.revision};form.hidden=false;form.querySelector('[type=submit]').textContent=requested.open?'Activar amb PIN':'Tancar amb PIN';message.textContent='';messageKind='';pin.value='';pin.focus();
+  requested={open:!state.open,revision:state.revision};form.hidden=false;form.querySelector('[type=submit]').textContent=requested.open?'Obrir accés públic':'Tancar accés públic';message.textContent='';messageKind='';form.querySelector('[type=submit]').focus();
  });
- panel.querySelector('.broadcast-gate-cancel').addEventListener('click',()=>{pin.value='';requested=null;form.hidden=true;button.focus()});
+ panel.querySelector('.broadcast-gate-cancel').addEventListener('click',()=>{requested=null;form.hidden=true;button.focus()});
  form.addEventListener('submit',async event=>{
   event.preventDefault();if(busy||!requested)return;busy=true;button.disabled=true;const submit=form.querySelector('[type=submit]');submit.disabled=true;
   try{
-   const r=await fetch('/api/broadcast-visibility',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...requested,pin:pin.value}),signal:AbortSignal.timeout(15000)});const data=await r.json();if(!r.ok)throw Error(data.error||'No s’ha pogut canviar la visibilitat');
+   const r=await fetch('/api/broadcast-visibility',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(requested),signal:AbortSignal.timeout(15000)});const data=await r.json();if(!r.ok)throw Error(data.error||'No s’ha pogut canviar la visibilitat');
    show(data);form.hidden=true;requested=null;messageKind='result';message.textContent=data.open?'Emissió pública activada.':'Accés públic tancat. Les càmeres continuen connectades en privat.';
   }catch(e){messageKind='result';message.textContent=e.name==='TimeoutError'?'No s’ha rebut confirmació. Comprova l’estat abans de repetir l’acció.':e.message}
-  finally{pin.value='';busy=false;button.disabled=false;submit.disabled=false;await refresh()}
+  finally{busy=false;button.disabled=false;submit.disabled=false;await refresh()}
  });
  function start(){clearInterval(timer);refresh();timer=setInterval(refresh,5000)}
  addEventListener('pageshow',start);addEventListener('online',()=>refresh());document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refresh()});addEventListener('pagehide',()=>clearInterval(timer));start();
