@@ -1304,7 +1304,7 @@ function serveStatic(req, res) {
       ...(urlPath==='/service-worker.js'?{'Service-Worker-Allowed':'/'}:{}),
       "Content-Type": mimeTypes[ext] || "application/octet-stream",
     });
-    if(ext==='.html'){let html=content.toString('utf8');if(!['/login.html','/control-login.html'].includes(urlPath))html=html.replace('</head>','<link rel="stylesheet" href="/connection.css?v=20261106-1"><script src="/connection.js?v=20261106-1"></script></head>');if(urlPath==='/admin.html')html=html.replace('</head>','<link rel="stylesheet" href="/broadcast-gate.css?v=20261109-1"><script src="/broadcast-admin.js?v=20261120-3" defer></script></head>');
+    if(ext==='.html'){let html=content.toString('utf8');if(!['/login.html','/control-login.html'].includes(urlPath))html=html.replace('</head>','<link rel="stylesheet" href="/connection.css?v=20261106-1"><script src="/connection.js?v=20261120-1"></script></head>');if(urlPath==='/admin.html')html=html.replace('</head>','<link rel="stylesheet" href="/broadcast-gate.css?v=20261109-1"><script src="/broadcast-admin.js?v=20261120-3" defer></script></head>');
       if(['/tv-directe.html','/tv-table.html'].includes(urlPath))html=html.replace('<head>','<head><script>window.CPoolAdminPreview='+JSON.stringify(privateTvPreview)+'</script><link rel="stylesheet" href="/broadcast-gate.css?v=20261109-1"><script src="/broadcast-watch.js?v=20261109-2" defer></script>');
       const selectedTv = requestedUrl.searchParams.get("taula");
       if (urlPath === "/broadcast-hold.html" && requestedUrl.pathname === "/tv-directe.html" && ["1", "2"].includes(selectedTv)) {
