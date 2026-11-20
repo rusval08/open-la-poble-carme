@@ -298,3 +298,16 @@ body.tv-directe-body.results-tv-embed .tv-video {
   width: 100%;
   height: auto;
 }
+
+.results-sponsors-poster {
+  display: block;
+  position: relative;
+}
+.results-sponsor-vrp {
+  position: absolute;
+  inset: 0.8% auto auto 52%;
+  width: 14%;
+  height: 24.3%;
+  border-radius: 5%;
+  background: #0b111d url("/vrp-propostes.webp") 42.5% 93.1% / 398% 255% no-repeat;
+}
