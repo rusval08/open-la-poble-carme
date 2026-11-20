@@ -1,0 +1,48 @@
+.quadrant-game-controls { display: none; }
+.quadrant-compact {
+  background: #091525;
+  color: #edf5fa;
+}
+.quadrant-compact .players-header {
+  padding: 14px 12px 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.quadrant-compact .players-header h1 { font-size: clamp(1.25rem, 5vw, 1.65rem); }
+.quadrant-compact .players-header .eyebrow,
+.quadrant-compact .players-actions > :not(.quadrant-game-controls) { display: none; }
+.quadrant-compact .quadrant-game-controls { display: inline-flex; min-height: 36px; }
+.quadrant-compact .players-header + p[role="status"] { margin: 0 12px !important; min-height: 0 !important; }
+.quadrant-compact #manualBracket { display: block; max-width: 660px; margin: 0 auto; padding: 8px 10px 16px; }
+.quadrant-grid-round header { padding: 8px 10px; background: #16414a; border-radius: 7px; }
+.quadrant-grid-round h2, .quadrant-grid-round h3, .quadrant-grid-round p { margin: 0; }
+.quadrant-grid-round h2 { font-size: 1.1rem; }
+.quadrant-grid-round header p { font-size: .8rem; color: #e3eef4; }
+.quadrant-grid-cards { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 5px; margin-top: 6px; }
+.quadrant-grid-card { min-width: 0; border: 1px solid #436674; border-radius: 7px; background: #102333; padding: 4px; }
+.quadrant-grid-card h3 { font-size: .82rem; color: #d0eeec; padding: 0 4px 2px; }
+.quadrant-grid-card button {
+  display: block; width: 100%; min-height: 36px; padding: 3px 6px; border: 0; border-top: 1px solid #365362;
+  color: #edf5fa; background: transparent; text-align: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.quadrant-grid-card small { display: block; padding: 2px 4px; }
+.quadrant-grid-actions { display: flex; align-items: center; justify-content: space-between; gap: 5px; margin-top: 7px; }
+.quadrant-grid-actions button, .quadrant-player-picker button {
+  min-height: 40px; padding: 4px 9px; border: 1px solid #729699; border-radius: 6px; background: #17434b; color: #fff; font-weight: 700;
+}
+.quadrant-grid-progress { margin-top: 8px; }
+.quadrant-grid-progress summary { padding: 8px 0; cursor: pointer; }
+.quadrant-grid-progress ul { padding: 0; list-style: none; }
+.quadrant-grid-progress li { display: grid; padding: 6px; border-bottom: 1px solid #365362; }
+.quadrant-player-picker {
+  position: fixed; inset: auto 0 0; width: min(100%, 560px); max-width: 100%; max-height: 68dvh;
+  margin: 0 auto; padding: 14px 14px max(14px, env(safe-area-inset-bottom)); background: #112436; color: #fff;
+  border: 1px solid #6a8d9b; border-radius: 14px 14px 0 0;
+}
+.quadrant-player-picker::backdrop { background: #0009; }
+.quadrant-picker-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.quadrant-picker-header h2 { margin: 0; font-size: 1.2rem; }
+.quadrant-player-picker label { color: #fff; }
+.quadrant-player-choices { display: grid; gap: 5px; margin-block: 8px; }
+.quadrant-player-choices button { text-align: left; }
