@@ -47,6 +47,36 @@ function renderLiveNow() {
   }
   liveNowSection.innerHTML = `<article class="live-now-card"><span>En joc ara</span><strong>${active.length} partida${active.length === 1 ? "" : "es"} activa${active.length === 1 ? "" : "s"}</strong><div class="live-now-list">${active.map((board) => `<a href="#taula-${window.CPoolEscape(board.id)}"><b>${window.CPoolEscape(board.title)}</b><em>${window.CPoolEscape(board.homeName)} ${board.homeScore} - ${board.awayScore} ${window.CPoolEscape(board.awayName)}</em></a>`).join("")}</div></article>`;
 }
+const largeResults = new URLSearchParams(location.search).get("pantalla") === "1";
+const tvCards = [...document.querySelectorAll(".results-tv-card")];
+
+function renderTvTables() {
+  if (largeResults) return;
+  for (const [index, card] of tvCards.entries()) {
+    const number = index + 1;
+    const board = resultsState.scoreboards.find(item => Number(item.id) === number);
+    const [home, score, away] = card.querySelector(".results-tv-score").children;
+    home.textContent = board?.homeName || "—";
+    away.textContent = board?.awayName || "—";
+    score.textContent = board ? `${board.homeScore} — ${board.awayScore}` : "—";
+
+    const video = card.querySelector(".results-tv-video");
+    const frame = video.querySelector("iframe");
+    const open = resultsState.settings?.publicBroadcast?.open === true;
+    video.querySelector("p").hidden = open;
+    if (!open) {
+      frame?.remove();
+    } else if (!frame) {
+      const player = document.createElement("iframe");
+      player.title = `Emissió de TV Table ${number}`;
+      player.allow = "autoplay; fullscreen";
+      player.allowFullscreen = true;
+      player.src = `/tv-directe.html?taula=${number}&embed=1`;
+      video.append(player);
+    }
+  }
+}
+
 function renderResults() {
   tournamentNameElements.forEach((element) => {
     element.textContent =
@@ -59,7 +89,9 @@ function renderResults() {
     element.textContent = "El format de cada partit s’indica a la seva taula.";
   });
   renderLiveNow();
+  renderTvTables();
   resultsGrid.innerHTML = resultsState.scoreboards
+    .filter(board => largeResults || tvCards.length === 0 || ![1, 2].includes(Number(board.id)))
     .map((board) => {
       const winner = resultWinner(board);
       const previous = previousScores.get(board.id);

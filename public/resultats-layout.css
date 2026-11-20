@@ -1,0 +1,84 @@
+.results-redesign:not(.results-large) {
+  background: #101619 !important;
+  color: #f0eee7;
+}
+.results-redesign .results-wordmark {
+  display: flex;
+  align-items: center;
+  gap: .4em;
+  color: #f0eee7;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+.results-wordmark img { width: 1.65em; height: 1.65em; object-fit: contain; }
+.results-redesign .cpool-heading-logo,
+.results-redesign .global-logo { display: none; }
+.results-tv-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-block: 16px 26px;
+}
+.results-tv-card,
+.results-redesign .results-motion-window,
+.results-redesign .result-card {
+  border-radius: 0 !important;
+  border: 1px solid #46645f;
+}
+.results-tv-card { min-width: 0; background: #142823; }
+.results-tv-card > header,
+.results-tv-score { padding: 8px 12px; }
+.results-tv-card > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.results-tv-card h3,
+.results-other-heading { margin: 0; font-size: 1rem; }
+.results-tv-card a { color: #efd396; font-size: .8rem; padding: 5px; }
+.results-tv-video {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  background: #080c0d;
+  color: #d0d8d5;
+}
+.results-tv-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.results-tv-score {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  font-size: .8rem;
+  overflow-wrap: anywhere;
+}
+.results-tv-score strong { color: #efd396; font-size: 1rem; }
+.results-tv-score span:last-child { text-align: right; }
+.results-large .results-tv-grid,
+.results-large .results-other-heading { display: none; }
+
+body.tv-directe-body.results-tv-embed { margin: 0 !important; overflow: hidden; }
+body.tv-directe-body.results-tv-embed > :not(.tv-two-shell),
+body.tv-directe-body.results-tv-embed .tv-two-shell > :not(.tv-two-grid),
+body.tv-directe-body.results-tv-embed .tv-camera-card > :not(.tv-video) { display: none !important; }
+body.tv-directe-body.results-tv-embed .tv-two-grid { display: block !important; }
+body.tv-directe-body.results-tv-embed .tv-camera-card[hidden] { display: none !important; }
+body.tv-directe-body.results-tv-embed :is(.tv-two-shell, .tv-camera-card, .tv-video, .tv-video-container) {
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+body.tv-directe-body.results-tv-embed .tv-video {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+}
+
+@media (max-width: 620px) {
+  .results-tv-grid { grid-template-columns: minmax(0, 1fr); }
+}
