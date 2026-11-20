@@ -197,9 +197,6 @@ body.tv-directe-body.results-tv-embed .tv-video {
   background: currentColor;
   margin-top: 4px;
 }
-.results-more { margin: 8px 0 0; font-size: .75rem; color: #bacdcc; }
-.results-more a { display: inline-block; margin: 6px 12px 2px 0; color: #e2e8eb; }
-.results-large .results-more { display: none; }
 
 .results-redesign:not(.results-large) {
   background: radial-gradient(ellipse at 45% 4%, #101c1e, #080e10 72%) !important;
