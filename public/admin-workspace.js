@@ -38,9 +38,11 @@
   setInterval(updateCameraOverview,2000);
   const readiness=document.querySelector('.operations-overview');if(readiness)home.append(readiness);
   const tvIntro=document.createElement('div');tvIntro.className='admin-workspace-heading';tvIntro.innerHTML='<div><h2>TV i càmeres</h2><p>Canviar d’apartat no atura les càmeres ni l’emissió.</p></div><nav class="admin-tv-shortcuts" aria-label="Accessos de vídeo"><a href="/tv-directe.html?preview=admin" target="_blank" rel="noopener">Previsualització privada ↗</a><a href="/tv-directe.html?preview=admin&amp;marcador=1" target="_blank" rel="noopener">Vista del marcador ↗</a><a href="/gravacions.html">Gravacions i descàrregues</a><a href="#admin-home">Obrir o tancar el públic</a></nav>';tv.append(tvIntro);
-  const eventIntro=document.createElement('div');eventIntro.className='admin-workspace-heading';eventIntro.innerHTML='<div><h2>Campionat i pantalles</h2><p>Control dels partits i accessos a les pantalles públiques.</p></div>';event.append(eventIntro);
+  const eventIntro=document.createElement('div');eventIntro.className='admin-workspace-heading';eventIntro.innerHTML='<div><h2>Campionat i pantalles</h2></div><nav class="admin-tv-shortcuts" aria-label="Gestió del campionat"><a href="/jugadors">Gestionar jugadors</a><a href="/quadrant-admin">Configurar el quadrant</a></nav>';event.append(eventIntro);
   function group(parent,label,node,open=false){if(!node)return;const details=document.createElement('details');details.className='admin-workspace-details';details.open=open;const summary=document.createElement('summary');summary.textContent=label;details.append(summary,node);parent.append(details);return details}
   group(settings,'Còpies de seguretat',backups,true);
+  const exportCard=main.querySelector('a[href="/api/export"]');
+  if(exportCard)settings.append(exportCard);
   const advanced=document.querySelector('.operations-advanced');if(advanced){advanced.open=true;group(settings,'Patrocinadors i presentació',advanced)}
   group(settings,'Emissor amb retrocés',document.querySelector('.dvr-admin'));
   const readinessDetails=group(home,'Comprovacions i estat del sistema',operations);operations.id='systemReadiness';

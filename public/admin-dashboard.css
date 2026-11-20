@@ -62,3 +62,16 @@
 @media (max-width: 500px) {
   .admin-body .admin-workspace-nav button { padding-inline: 4px; }
 }
+.admin-table-status {
+  margin: 0 0 10px;
+  color: var(--dashboard-muted);
+  font-size: .85rem;
+}
+.admin-scorecards article a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 6px;
+  color: #a0f0cc;
+}
+#adminStateStatus:empty { display: none; }
