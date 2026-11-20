@@ -15,22 +15,8 @@ const DATA_FILE = process.env.DATA_FILE
   : path.join(DATA_DIR, "campionat-data.json");
 const BACKUP_DIR = path.join(DATA_DIR, "backups");
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "2026";
-const ADMIN_SECRET =
-  process.env.ADMIN_SECRET ||
-  crypto
-    .createHash("sha256")
-    .update(`${ADMIN_PASSWORD}:open-la-pobla`)
-    .digest("hex");
-const CONTROL_PASSWORD = process.env.CONTROL_PASSWORD || "8642";
-const CONTROL_SECRET =
-  process.env.CONTROL_SECRET ||
-  crypto
-    .createHash("sha256")
-    .update(`${CONTROL_PASSWORD}:open-la-pobla-control`)
-    .digest("hex");
-const RECTIFICATION_PIN = process.env.RECTIFICATION_PIN || ADMIN_PASSWORD;
 const guard = require('./public/server-guard.js')();
-const broadcastGate=require('./public/broadcast-gate-server.js')({isAdmin,readBody,sendJson,dataDir:DATA_DIR,onChange:()=>{if(!broadcastGate.status().open)liveRoute.closePublicViewers();stateVersion++;broadcast()},pinHash:process.env.PUBLIC_BROADCAST_PIN_HASH});
+const broadcastGate=require('./public/broadcast-gate-server.js')({isAdmin,readBody,sendJson,dataDir:DATA_DIR,onChange:()=>{if(!broadcastGate.status().open)liveRoute.closePublicViewers();stateVersion++;broadcast()}});
 let persistedSnapshot=null,storageError=false;
 const instanceId=crypto.randomBytes(12).toString('hex');let stateVersion=0;
 const clients = new Set();
@@ -273,31 +259,11 @@ function parseCookies(req) {
       }),
   );
 }
-function adminToken() {
-  return crypto
-    .createHmac("sha256", ADMIN_SECRET)
-    .update("admin")
-    .digest("hex");
-}
-function controlToken() {
-  return crypto
-    .createHmac("sha256", CONTROL_SECRET)
-    .update("control")
-    .digest("hex");
-}
 function isAdmin(req) {
   return guard.valid(parseCookies(req).openPoblaAdmin,'admin');
 }
-function isControl(req) {
-  return guard.valid(parseCookies(req).openPoblaControl,'control');
-}
-function canControl(req) {
-  return isControl(req);
-}
 function setAdminCookie(req,res){guard.cookie(req,res,'openPoblaAdmin',guard.token('admin'))}
-function setControlCookie(req,res){guard.cookie(req,res,'openPoblaControl',guard.token('control'))}
 function clearAdminCookie(req,res){guard.revoke(parseCookies(req).openPoblaAdmin,'admin');guard.cookie(req,res,'openPoblaAdmin','',true)}
-function clearControlCookie(req,res){guard.revoke(parseCookies(req).openPoblaControl,'control');guard.cookie(req,res,'openPoblaControl','',true)}
 function sendRedirect(res, location) {
   res.writeHead(302, { Location: location, "Cache-Control": "no-store" });
   res.end();
@@ -488,15 +454,6 @@ function sameMatch(first, second) {
     JSON.stringify(normalizedMatch(second))
   );
 }
-function rectificationAllowed(pin) {
-  return crypto.timingSafeEqual(
-    crypto
-      .createHash("sha256")
-      .update(String(pin || ""))
-      .digest(),
-    crypto.createHash("sha256").update(RECTIFICATION_PIN).digest(),
-  );
-}
 function bracketError(statusCode, message) {
   return Object.assign(new Error(message), { statusCode });
 }
@@ -544,18 +501,16 @@ function saveBracketChanges(body) {
   } else {
     throw bracketError(400, "No hi ha canvis per guardar");
   }
-  const hasPin = rectificationAllowed(body.rectificationPin);
-  if (body.rectificationPin !== undefined && !hasPin)
-    throw bracketError(403, "PIN de rectificació incorrecte");
+  const confirmedRectification = body.confirmRectification === true;
   for (const [key, count] of MANUAL_ROUNDS) {
     for (let index = 0; index < count; index++) {
       const before = previous[key][index];
       const after = next[key][index];
       if (sameMatch(before, after)) continue;
-      if (before.winner && !hasPin)
+      if (before.winner && !confirmedRectification)
         throw bracketError(
           403,
-          "Cal el PIN de rectificació per modificar un partit finalitzat",
+          "Obre la rectificació per modificar un partit finalitzat",
         );
       if (after.winner) {
         if (after.score === "Passa directe") {
@@ -598,11 +553,11 @@ function saveBracketChanges(body) {
       if (
         previous[key][index].winner &&
         !sameMatch(previous[key][index], next[key][index]) &&
-        !hasPin
+        !confirmedRectification
       ) {
         throw bracketError(
           403,
-          "Aquest canvi afecta un partit finalitzat i necessita el PIN de rectificació",
+          "Aquest canvi afecta un partit finalitzat. Confirma la rectificació.",
         );
       }
     }
@@ -1011,7 +966,7 @@ async function championshipRoute(req, res, url) {
           .filter((n) => n.endsWith(".json"));
       } catch {}
       sendJson(res, 200, {
-        security:{adminPasswordConfigured:!!process.env.ADMIN_PASSWORD,controlPasswordConfigured:!!process.env.CONTROL_PASSWORD,strongPasswords:ADMIN_PASSWORD.length>=12&&CONTROL_PASSWORD.length>=8},
+        security:{adminPasswordConfigured:!!process.env.ADMIN_PASSWORD,strongPasswords:ADMIN_PASSWORD.length>=12},
         persistent: diskIsPersistent(),
         dataDir: DATA_DIR,
         serverSnapshots: snapshots.length,
@@ -1292,7 +1247,11 @@ function serveStatic(req, res) {
   if (urlPath === "/" || urlPath === "/admin") urlPath = "/admin.html";
   if (urlPath === "/control") urlPath = "/index.html";
   if (urlPath === "/login") urlPath = "/login.html";
-  if (urlPath === "/control-login") urlPath = "/control-login.html";
+  if (["/control-login", "/control-login.html"].includes(urlPath)) {
+    const original = new URL(req.url, "http://localhost");
+    sendRedirect(res, "/login" + original.search);
+    return;
+  }
   if (urlPath.startsWith("/scoreboard/")) urlPath = "/scoreboard.html";
   if (urlPath.startsWith("/obs/")) urlPath = "/obs.html";
   if (urlPath.startsWith("/obs-safe/")) urlPath = "/obs-safe.html";
@@ -1305,20 +1264,15 @@ function serveStatic(req, res) {
   if (urlPath === "/quadrant-control") urlPath = "/quadrant-control.html";
   if (urlPath === "/jugadors") urlPath = "/jugadors.html";
   if (urlPath === "/directe") urlPath = "/directe.html";
-  if (isAdminProtectedPage(urlPath) && !isAdmin(req)) {
+  const requestedUrl = new URL(req.url, "http://localhost");
+  if ((isAdminProtectedPage(urlPath) || isControlProtectedPage(urlPath)) && !isAdmin(req)) {
     sendRedirect(
       res,
-      `/login?next=${encodeURIComponent(new URL(req.url, `http://${req.headers.host}`).pathname)}`,
+      `/login?next=${encodeURIComponent(requestedUrl.pathname + requestedUrl.search)}`,
     );
     return;
   }
-  if (isControlProtectedPage(urlPath) && !canControl(req)) {
-    sendRedirect(
-      res,
-      `/control-login?next=${encodeURIComponent(new URL(req.url, `http://${req.headers.host}`).pathname)}`,
-    );
-    return;
-  }
+
   if(['/live-relay-server.js','/server-guard.js','/recordings-server.js','/broadcast-gate-server.js'].includes(urlPath)){sendJson(res,404,{error:'No trobat'});return}
   const privateTvPreview=isAdmin(req)&&new URL(req.url,'http://localhost').searchParams.get('preview')==='admin';
   if(['/tv-directe.html','/tv-table.html'].includes(urlPath)&&!broadcastGate.status().open&&!privateTvPreview)urlPath='/broadcast-hold.html';
@@ -1340,7 +1294,7 @@ function serveStatic(req, res) {
       ...(urlPath==='/service-worker.js'?{'Service-Worker-Allowed':'/'}:{}),
       "Content-Type": mimeTypes[ext] || "application/octet-stream",
     });
-    if(ext==='.html'){let html=content.toString('utf8');if(!['/login.html','/control-login.html'].includes(urlPath))html=html.replace('</head>','<link rel="stylesheet" href="/connection.css?v=20261106-1"><script src="/connection.js?v=20261106-1"></script></head>');if(urlPath==='/admin.html')html=html.replace('</head>','<link rel="stylesheet" href="/broadcast-gate.css?v=20261109-1"><script src="/broadcast-admin.js?v=20261109-2" defer></script></head>');
+    if(ext==='.html'){let html=content.toString('utf8');if(!['/login.html','/control-login.html'].includes(urlPath))html=html.replace('</head>','<link rel="stylesheet" href="/connection.css?v=20261106-1"><script src="/connection.js?v=20261106-1"></script></head>');if(urlPath==='/admin.html')html=html.replace('</head>','<link rel="stylesheet" href="/broadcast-gate.css?v=20261109-1"><script src="/broadcast-admin.js?v=20261120-3" defer></script></head>');
       if(['/tv-directe.html','/tv-table.html'].includes(urlPath))html=html.replace('<head>','<head><script>window.CPoolAdminPreview='+JSON.stringify(privateTvPreview)+'</script><link rel="stylesheet" href="/broadcast-gate.css?v=20261109-1"><script src="/broadcast-watch.js?v=20261109-2" defer></script>');
       res.end(html)}else res.end(content);
   });
@@ -1359,7 +1313,7 @@ const server = http.createServer(async (req, res) => {
   if(await broadcastGate.route(req,res,url))return;
   if(!broadcastGate.allowed(req)&&url.pathname.startsWith('/api/live/')){sendJson(res,403,{error:'Emissió pública tancada per l’organització'});return}
   if(!broadcastGate.allowed(req)&&url.pathname==='/api/recordings/public'){sendJson(res,403,{error:'Les TV Table encara no estan obertes al públic'});return}
-  if(req.method==='POST'&&['/api/login','/api/control-login'].includes(url.pathname)&&guard.limited(req)){res.setHeader('Retry-After','900');sendJson(res,429,{error:'Massa intents. Espera 15 minuts abans de tornar-ho a provar.'});return}
+  if(req.method==='POST'&&url.pathname==='/api/login'&&guard.limited(req)){res.setHeader('Retry-After','900');sendJson(res,429,{error:'Massa intents. Espera 15 minuts abans de tornar-ho a provar.'});return}
   if (req.method === "GET" && url.pathname === "/api/state") {
     sendJson(res, 200, viewState(req));
     return;
@@ -1376,7 +1330,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
   if (req.method === "GET" && url.pathname === "/api/session") {
-    sendJson(res, 200, { admin: isAdmin(req), control: canControl(req) });
+    sendJson(res, 200, { admin: isAdmin(req), control: isAdmin(req) });
     return;
   }
   if (req.method === "POST" && url.pathname === "/api/login") {
@@ -1393,23 +1347,9 @@ const server = http.createServer(async (req, res) => {
     }
     return;
   }
-  if (req.method === "POST" && url.pathname === "/api/control-login") {
-    try {
-      const body = JSON.parse((await readBody(req)) || "{}");
-      if (!guard.equal(body.password||'',CONTROL_PASSWORD)) {
-        guard.failed(req);sendJson(res, 403, { error: "PIN de control incorrecte" });
-        return;
-      }
-      guard.succeeded(req);setControlCookie(req,res);
-      sendJson(res, 200, { ok: true });
-    } catch (error) {
-      sendJson(res, error.statusCode||400, { error: error.statusCode?error.message:"JSON invalid" });
-    }
-    return;
-  }
+
   if (req.method === "POST" && url.pathname === "/api/logout") {
     clearAdminCookie(req,res);
-    clearControlCookie(req,res);
     sendJson(res, 200, { ok: true });
     return;
   }
@@ -1530,7 +1470,7 @@ const server = http.createServer(async (req, res) => {
     req.method === "POST" &&
     (url.pathname.startsWith("/api/scoreboards/") ||
       controlPostRoutes.includes(url.pathname)) &&
-    !canControl(req)
+    !isAdmin(req)
   ) {
     sendUnauthorized(res);
     return;
