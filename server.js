@@ -41,11 +41,6 @@ const PLAYER_COUNT = 128;
 const RECTIFICATION_MS = 20000;
 const DEFAULT_TOURNAMENT_NAME = "Open la Pobla";
 const DEFAULT_WIN_TARGET = 5;
-function validYoutubeId(value) {
-  return typeof value === "string" && /^[A-Za-z0-9_-]{11}$/.test(value)
-    ? value
-    : "";
-}
 const MANUAL_ROUNDS = [
   ["r128", 64],
   ["r64", 32],
@@ -142,8 +137,6 @@ const state = {
   settings: {
     tournamentName: DEFAULT_TOURNAMENT_NAME,
     winTarget: DEFAULT_WIN_TARGET,
-    youtubeVideoId: "",
-    youtubeVideoId2: "",
   },
   scoreboards: Array.from({ length: SCOREBOARD_COUNT }, (_, index) => ({
     id: index + 1,
@@ -170,12 +163,6 @@ if (savedData.settings && typeof savedData.settings === "object") {
       savedData.settings.tournamentName || DEFAULT_TOURNAMENT_NAME,
     ).trim() || DEFAULT_TOURNAMENT_NAME;
   state.settings.winTarget = normalizeWinTarget(savedData.settings.winTarget);
-  state.settings.youtubeVideoId = validYoutubeId(
-    savedData.settings.youtubeVideoId,
-  );
-  state.settings.youtubeVideoId2 = validYoutubeId(
-    savedData.settings.youtubeVideoId2,
-  );
 }
 if (Array.isArray(savedData.scoreboards)) {
   state.scoreboards = state.scoreboards.map((board, index) => {
@@ -270,7 +257,7 @@ function publicState() {
 }
 function viewState(req){
  const value=publicState();if(broadcastGate.allowed(req))return value;
- value.settings=structuredClone(value.settings);value.settings.youtubeVideoId='';value.settings.youtubeVideoId2='';
+ value.settings=structuredClone(value.settings);
  value.settings.production={};return value;
 }
 function readBody(req,limit=1000000){return new Promise((resolve,reject)=>{let body='',bytes=0,done=false;req.on('data',chunk=>{if(done)return;bytes+=chunk.length;if(bytes>limit){done=true;reject(bracketError(413,'La petició és massa gran'));return}body+=chunk});req.on('end',()=>{if(!done){done=true;resolve(body)}});req.on('error',e=>{if(!done){done=true;reject(e)}});req.on('aborted',()=>{if(!done){done=true;reject(bracketError(400,'Petició interrompuda'))}})})}
@@ -902,8 +889,6 @@ function validateBackup(bundle) {
     tournamentName:
       text(input.settings.tournamentName, 80) || DEFAULT_TOURNAMENT_NAME,
     winTarget: target,
-    youtubeVideoId: validYoutubeId(input.settings.youtubeVideoId),
-    youtubeVideoId2: validYoutubeId(input.settings.youtubeVideoId2),
     production: BroadcastState.normalize(input.settings.production),
     presentation: Championship.presentation(input.settings.presentation),
   };
@@ -1586,20 +1571,6 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "POST" && url.pathname === "/api/settings") {
     try {
       const body = JSON.parse((await readBody(req)) || "{}");
-      const videoPatch = {};
-      for (const key of ["youtubeVideoId", "youtubeVideoId2"]) {
-        if (Object.prototype.hasOwnProperty.call(body, key)) {
-          const id = String(body[key] || "").trim();
-          if (id && !validYoutubeId(id)) {
-            sendJson(res, 400, {
-              error: "Enllaç del vídeo de YouTube no vàlid",
-            });
-            return;
-          }
-          videoPatch[key] = id;
-        }
-      }
-      Object.assign(state.settings, videoPatch);
       const tournamentName =
         String(body.tournamentName || DEFAULT_TOURNAMENT_NAME).trim() ||
         DEFAULT_TOURNAMENT_NAME;

@@ -71,20 +71,56 @@
     connection.onInterrupted=()=>{if(connections.get(table)===connection)holdFrame(table)};
     connection.onResumed=()=>{connection.lastFrame=Date.now();connection.video?.play().catch(()=>{})};
     connection.onClose=()=>{clearInterval(connection.timer);if(connecting.get(table)===connection)connecting.delete(table);if(connections.get(table)===connection){connections.delete(table);const video=remote.get(table);if(video)video.dataset.reconnecting='true';announce()}discardStaged(table,connection)};
-    await connection.start();if(connection.closed)throw Error('La connexió de vídeo s’ha interromput');
+    const startupTimer=setTimeout(()=>connection.close(),15000);
+    try{await connection.start()}finally{clearTimeout(startupTimer)}
+    if(connection.closed)throw Error('La connexió de vídeo s’ha interromput');
     if(!allowed(table)||pending.get(table)!==token){connection.close();return}connections.set(table,connection);if(connecting.get(table)===connection)connecting.delete(table);
     let lastTime=-1,lastDecoded=-1,checking=false;connection.lastFrame=Date.now();
     connection.timer=setInterval(async()=>{
      const focused=Number(document.body.dataset?.fullTable);if(document.hidden||focused&&focused!==table||checking||connection.closed)return;
-     const video=remote.get(table);if(video?.paused&&video.videoWidth>0&&video.dataset.reconnecting!=='true')return;checking=true;
+     const video=connection.video;
+     if(video===remote.get(table)&&video?.paused&&video.dataset.reconnecting!=='true'&&navigator.onLine!==false){
+      connection.lastFrame=Date.now();return;
+     }
+     checking=true;
      try{
       let available=false,advanced=false,decoded=0;
-      if(connection.pc?.getStats){const stats=await connection.pc.getStats();stats.forEach(r=>{if(r.type==='inbound-rtp'&&(r.kind==='video'||r.mediaType==='video')&&Number.isFinite(r.framesDecoded)){available=true;decoded+=r.framesDecoded}})}
+      const peer=connection.pc||connection.peers?.values().next().value?.pc;
+      if(peer?.getStats){
+       try{
+        const stats=await peer.getStats();
+        stats.forEach(report=>{
+         if(report.type==='inbound-rtp'&&(report.kind==='video'||report.mediaType==='video')&&Number.isFinite(report.framesDecoded)){
+          available=true;decoded+=report.framesDecoded;
+         }
+        });
+       }catch{}
+      }
+      if(connection.closed||connections.get(table)!==connection)return;
       connection.usesDecodedStats=available;
-      if(available){advanced=decoded>lastDecoded;lastDecoded=decoded}else if(video&&video.readyState>=2&&video.videoWidth){advanced=video.currentTime!==lastTime;lastTime=video.currentTime}
-      if(advanced){connection.lastFrame=Date.now();if(video&&connection.video===video){if(frozen.has(table)){clearFrame(table);announce()}rememberFrame(table,video)}}
-      const stalled=Date.now()-connection.lastFrame;if(stalled>6000)holdFrame(table);if(stalled>15000)connection.close();
-     }catch{}finally{checking=false}
+      if(video?.readyState>=2&&video.videoWidth){
+       advanced=video.currentTime!==lastTime;
+       lastTime=video.currentTime;
+      }
+      if(available){
+       advanced=decoded>lastDecoded;
+       lastDecoded=decoded;
+      }
+      if(advanced){
+       connection.lastFrame=Date.now();
+       if(video===remote.get(table)){
+        if(frozen.has(table)||video?.dataset.reconnecting==='true'){clearFrame(table);announce()}
+        rememberFrame(table,video);
+       }
+      }
+     }finally{
+      checking=false;
+      if(!connection.closed){
+       const stalled=Date.now()-connection.lastFrame;
+       if(stalled>6000)holdFrame(table);
+       if(stalled>15000)connection.close();
+      }
+     }
     },2000);
    }catch(error){connection?.close();discardStaged(table,connection);if(pending.get(table)===token){const el=document.querySelector('#tvLiveStatus'+table);if(el)el.textContent=error.message||'Esperant vídeo · Reconnexió automàtica'}}finally{if(pending.get(table)===token)pending.delete(table);if(connecting.get(table)===connection)connecting.delete(table)}
   }
