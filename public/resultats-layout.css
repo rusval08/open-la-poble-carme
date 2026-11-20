@@ -272,3 +272,7 @@ body.tv-directe-body.results-tv-embed .tv-video {
 .results-bottom-nav .results-wordmark::after {
   width: clamp(5px, 2.2vw, 18px);
 }
+
+.results-redesign .cpool-connection[data-connection="live"] {
+  display: none;
+}
