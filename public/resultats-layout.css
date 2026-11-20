@@ -182,7 +182,7 @@ body.tv-directe-body.results-tv-embed .tv-video {
   inset: auto 0 0;
   padding: 4px 8px max(5px, env(safe-area-inset-bottom));
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   background: #0b1e21;
   border-top: 1px solid #29464b;
 }
@@ -279,4 +279,15 @@ body.tv-directe-body.results-tv-embed .tv-video {
 }
 .results-bottom-nav a[aria-current]::after {
   border-radius: 4px;
+}
+
+.results-redesign .results-bottom-nav .results-wordmark {
+  align-self: center;
+  gap: .28em;
+  font-size: clamp(.66rem, 3.6vw, 1.15rem);
+  white-space: nowrap;
+}
+.results-bottom-nav .results-wordmark::before,
+.results-bottom-nav .results-wordmark::after {
+  width: clamp(5px, 2.2vw, 18px);
 }
