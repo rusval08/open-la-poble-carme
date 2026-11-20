@@ -273,3 +273,28 @@ body.tv-directe-body.results-tv-embed .tv-video {
 .results-redesign .cpool-connection[data-connection="live"] {
   display: none;
 }
+
+.results-large .results-sponsors {
+  display: none;
+}
+.results-sponsors {
+  margin-top: 9px;
+  border: 1px solid #8cb6b6;
+  background: #101c1d;
+}
+.results-sponsors h3 {
+  margin: 0;
+  padding: 5px 10px;
+  color: #efbd6f;
+  background: #192b2d;
+  font: 700 .9rem/1.2 system-ui, sans-serif;
+}
+.results-sponsors a {
+  display: block;
+  padding: 6px;
+}
+.results-sponsors img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
