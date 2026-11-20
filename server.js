@@ -1484,7 +1484,28 @@ const server = http.createServer(async (req, res) => {
     const id = Number(url.pathname.split("/").at(-1));
     try {
       const patch = JSON.parse((await readBody(req)) || "{}");
-      const updated = updateScoreboard(id, patch);
+      let scorePatch = patch;
+      if (patch.expectedScore) {
+        const board = state.scoreboards.find(item => item.id === id);
+        const fields = ["homeName", "awayName", "homeScore", "awayScore"];
+        if (!board || board.locked || fields.some(field => board[field] !== patch.expectedScore[field])) {
+          throw bracketError(409, "El marcador ha canviat. Revisa la puntuació abans de tornar-ho a provar.");
+        }
+      }
+      if (patch.point) {
+        const { round, index, side, step } = patch.point;
+        if (!["home", "away"].includes(side) || ![-1, 1].includes(step)) {
+          throw bracketError(400, "Canvi de puntuació no vàlid.");
+        }
+        const board = state.scoreboards.find(item => item.id === id);
+        const match = board && findCurrentMatchForBoard(board);
+        if (!board || board.locked || !match || match.roundKey !== round || match.index !== index) {
+          throw bracketError(409, "El partit ja no està actiu en aquesta taula.");
+        }
+        const field = side + "Score";
+        scorePatch = { [field]: Number(board[field]) + step };
+      }
+      const updated = updateScoreboard(id, scorePatch);
       if (!updated) {
         sendJson(res, 404, { error: "Taula no trobada" });
         return;

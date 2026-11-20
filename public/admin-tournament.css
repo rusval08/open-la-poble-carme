@@ -1,0 +1,92 @@
+.tournament-admin {
+  --admin-gold: #efd081;
+  --admin-ink: #0c171b;
+  --admin-panel: #192c32;
+  --admin-line: #49636a;
+  padding-bottom: calc(65px + env(safe-area-inset-bottom));
+}
+.tournament-admin-nav {
+  position: fixed;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  inset: auto 0 0;
+  background: var(--admin-ink);
+  border-top: 1px solid var(--admin-line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.tournament-admin-nav a {
+  display: grid;
+  min-height: 52px;
+  place-items: center;
+  color: #f2f5f6;
+  font-weight: 750;
+  text-decoration: none;
+  border-top: 3px solid transparent;
+}
+.tournament-admin-nav a[aria-current] {
+  color: var(--admin-gold);
+  border-top-color: var(--admin-gold);
+}
+.tournament-admin .admin-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+.tournament-admin .admin-shortcuts .admin-shortcut {
+  min-height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  color: #f2f5f6;
+  background: var(--admin-panel);
+  border: 1px solid var(--admin-line);
+}
+.tournament-admin .admin-shortcut span { color: var(--admin-gold); }
+.inline-scoreboard {
+  display: grid;
+  gap: 5px;
+  border: 1px solid var(--admin-line);
+  border-radius: 8px;
+  padding: 6px;
+  background: var(--admin-ink);
+  color: #f2f5f6;
+}
+.inline-score-toggle {
+  min-height: 44px;
+  background: var(--admin-panel);
+  color: #f2f5f6;
+  border: 0;
+  border-radius: 5px;
+  font-weight: 750;
+}
+.inline-score-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 2ch 44px 44px;
+  align-items: center;
+  gap: 5px;
+  overflow-wrap: anywhere;
+}
+.inline-score-row strong { font-size: 1.15rem; text-align: center; }
+.inline-score-row button,
+.tournament-admin .score-row button { min-height: 44px; }
+.inline-score-row button {
+  border: 1px solid var(--admin-line);
+  border-radius: 5px;
+  background: var(--admin-panel);
+  color: white;
+  font-weight: 800;
+}
+.inline-score-row button:last-child { background: var(--admin-gold); color: var(--admin-ink); }
+.inline-scoreboard a { color: var(--admin-gold); }
+@media (max-width: 640px) {
+  .tournament-admin .admin-shortcuts { grid-template-columns: 1fr; }
+  .tournament-admin .board-tabs {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 4px;
+  }
+  .tournament-admin .board-tabs .tab { display: grid; place-items: center; padding: 0; min-height: 44px; }
+  .tournament-admin .board-tabs .tab strong { display: none; }
+}

@@ -17,7 +17,19 @@
   const shortcuts=document.createElement('nav');
   shortcuts.className='admin-shortcuts';
   shortcuts.setAttribute('aria-label','Accés ràpid');
-  shortcuts.innerHTML='<a class="admin-shortcut" href="/control"><strong>Taules</strong><span>Control de marcadors</span></a><a class="admin-shortcut" href="/quadrant-control"><strong>Quadrant</strong><span>Enfrontaments</span></a><a class="admin-shortcut" href="#admin-tv"><strong>TV Table</strong><span>Vídeo i càmeres</span></a><a class="admin-shortcut" href="#admin-settings"><strong>Ajustos</strong><span>Configuració i còpies</span></a>';
+  shortcuts.innerHTML = [
+    ['/quadrant-control', 'Quadrant'],
+    ['/control', 'Marcadors'],
+    ['/jugadors', 'Jugadors'],
+    ['#admin-tv', 'TV Table 1 i 2'],
+    ['#admin-broadcast', 'Emissió pública'],
+    ['#admin-sponsors', 'Patrocinadors'],
+    ['#admin-backups', 'Còpia de seguretat'],
+    ['#admin-settings', 'Configuració'],
+  ].map(([href, label]) => `<a class="admin-shortcut" href="${href}"><strong>${label}</strong><span aria-hidden="true">›</span></a>`).join('');
+  gate.id = 'admin-broadcast';
+  backups.id = 'admin-backups';
+
   const cameras=document.createElement('section');
   cameras.className='admin-section admin-camera-overview';
   cameras.innerHTML='<h2>Càmeres</h2><div class="admin-camera-cards"><a href="#admin-tv"><strong>Càmera 1</strong><span data-camera-status="1">Comprovant…</span></a><a href="#admin-tv"><strong>Càmera 2</strong><span data-camera-status="2">Comprovant…</span></a></div>';
@@ -43,7 +55,7 @@
   group(settings,'Còpies de seguretat',backups,true);
   const exportCard=main.querySelector('a[href="/api/export"]');
   if(exportCard)settings.append(exportCard);
-  const advanced=document.querySelector('.operations-advanced');if(advanced){advanced.open=true;group(settings,'Patrocinadors i presentació',advanced)}
+  const advanced=document.querySelector('.operations-advanced');if(advanced){advanced.id='admin-sponsors';advanced.open=true;group(settings,'Patrocinadors i presentació',advanced)}
   group(settings,'Emissor amb retrocés',document.querySelector('.dvr-admin'));
   const readinessDetails=group(home,'Comprovacions i estat del sistema',operations);operations.id='systemReadiness';
   for(const node of originals){
