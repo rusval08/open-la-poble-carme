@@ -225,3 +225,87 @@ body.tv-directe-body.results-tv-embed .tv-video {
 .results-more { margin: 8px 0 0; font-size: .75rem; color: #bacdcc; }
 .results-more a { display: inline-block; margin: 6px 12px 2px 0; color: #e2e8eb; }
 .results-large .results-more { display: none; }
+
+.results-redesign:not(.results-large) {
+  background: radial-gradient(ellipse at 45% 4%, #101c1e, #080e10 72%) !important;
+}
+.results-redesign:not(.results-large) > .results-header {
+  min-height: calc(45px + env(safe-area-inset-top)) !important;
+  padding-top: calc(5px + env(safe-area-inset-top)) !important;
+  background: radial-gradient(ellipse at center, #113034, #06181b) !important;
+  box-shadow: none;
+}
+.results-redesign:not(.results-large) .results-header .results-brand {
+  padding: 0 !important;
+  border: 0 !important;
+}
+.results-redesign:not(.results-large) .results-brand > h1 {
+  display: none;
+}
+.results-redesign .results-wordmark {
+  font-weight: 700;
+  letter-spacing: .21em;
+}
+.results-redesign:not(.results-large) .results-hero-title {
+  max-width: none;
+}
+.results-redesign:not(.results-large) .results-hero-title h2 {
+  text-align: left;
+  text-shadow: none;
+}
+.results-redesign .results-hero-title h2::after {
+  border-radius: 4px;
+}
+.results-redesign .results-tv-card > header {
+  min-height: 27px;
+  background: linear-gradient(110deg, #17494c, #0d2d31);
+}
+.results-tv-status {
+  border-radius: 3px;
+}
+.results-redesign .results-tv-video p {
+  position: relative;
+  margin: 0;
+  padding: 5px 9px;
+  background: #071113ed;
+}
+#taula-1:not(.broadcast-open) .results-tv-video {
+  background: #080c0d url("/tv-table-1-poster.webp") center / cover no-repeat;
+}
+#taula-2:not(.broadcast-open) .results-tv-video {
+  background: #080c0d url("/tv-table-2-poster.webp") center / cover no-repeat;
+}
+.results-tv-card.broadcast-open .results-tv-video {
+  background: #080c0d;
+}
+.results-redesign .results-tv-score {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  position: relative;
+  min-height: 27px;
+  padding: 2px 10px;
+  background: linear-gradient(90deg, #132b38, #0c171a);
+}
+.results-redesign .results-tv-score strong {
+  font-size: 1.05rem;
+}
+.results-redesign .results-tv-score span:last-of-type {
+  padding-right: 25px;
+}
+.results-redesign .results-tv-score a {
+  position: absolute;
+  right: 5px;
+}
+.results-other h3 {
+  color: #efbd6f;
+}
+.results-redesign:not(.results-large) .results-bottom-nav {
+  background: linear-gradient(110deg, #10272b, #071215);
+}
+.results-bottom-nav svg {
+  width: 21px;
+  height: 21px;
+  margin-bottom: 3px;
+}
+.results-bottom-nav a[aria-current]::after {
+  border-radius: 4px;
+}
