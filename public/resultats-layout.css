@@ -219,10 +219,10 @@ body.tv-directe-body.results-tv-embed .tv-video {
   background: #071113ed;
 }
 #taula-1:not(.broadcast-open) .results-tv-video {
-  background: #080c0d url("/tv-table-1-poster.webp") center / cover no-repeat;
+  background: #080c0d url("/tv-table-1-carme.webp") center / cover no-repeat;
 }
 #taula-2:not(.broadcast-open) .results-tv-video {
-  background: #080c0d url("/tv-table-2-poster.webp") center / cover no-repeat;
+  background: #080c0d url("/tv-table-2-collage.webp") center / cover no-repeat;
 }
 .results-tv-card.broadcast-open .results-tv-video {
   background: #080c0d;
