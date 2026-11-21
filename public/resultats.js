@@ -56,10 +56,18 @@ function renderTvTables() {
   for (const [index, card] of tvCards.entries()) {
     const number = index + 1;
     const board = resultsState.scoreboards.find(item => Number(item.id) === number);
-    const [home, score, away] = card.querySelector(".results-tv-score").children;
-    home.textContent = board?.homeName || "—";
-    away.textContent = board?.awayName || "—";
-    score.textContent = board ? `${board.homeScore} — ${board.awayScore}` : "—";
+    const scoreboard = card.querySelector(".results-tv-score");
+    const hasMatch = Boolean(
+      board?.homeName?.trim() && board.homeName !== "JUGADOR LOCAL" &&
+      board.awayName?.trim() && board.awayName !== "JUGADOR VISITANT"
+    );
+    scoreboard.hidden = !hasMatch;
+    if (hasMatch) {
+      const [home, score, away] = scoreboard.children;
+      home.textContent = board.homeName;
+      away.textContent = board.awayName;
+      score.textContent = `${board.homeScore} — ${board.awayScore}`;
+    }
 
     const video = card.querySelector(".results-tv-video");
     const frame = video.querySelector("iframe");

@@ -144,7 +144,6 @@ body.tv-directe-body.results-tv-embed .tv-video {
 }
 .results-redesign .results-tv-score strong { color: #fff; }
 .results-redesign .results-tv-score span:last-of-type { text-align: right; }
-.results-redesign .results-tv-score a { color: #fff; font-size: 1.05rem; text-decoration: none; }
 .results-redesign:not(.results-large) .results-other {
   display: block;
   border: 1px solid #8cb6b6;
@@ -229,12 +228,11 @@ body.tv-directe-body.results-tv-embed .tv-video {
 .results-redesign .results-tv-score strong {
   font-size: 1.05rem;
 }
-.results-redesign .results-tv-score span:last-of-type {
-  padding-right: 25px;
+.results-redesign .results-tv-score[hidden] {
+  display: none;
 }
-.results-redesign .results-tv-score a {
-  position: absolute;
-  right: 5px;
+.results-tv-card > header .results-tv-status {
+  margin-inline-start: auto;
 }
 .results-other h3 {
   color: #efbd6f;
