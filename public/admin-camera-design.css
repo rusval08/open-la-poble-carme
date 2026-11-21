@@ -38,6 +38,86 @@
 .admin-landing .action-icon { display: grid; place-items: center start; padding-right: 8px; border-right: 1px solid #40586d; }
 .admin-landing .action-icon svg { width: 29px; height: 29px; color: #9eddf3; }
 .admin-landing .arrow { width: 18px; color: #c0d7e7; }
+
+.admin-landing { background: #080b10; }
+.admin-landing main {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: min(100%, 650px);
+  min-height: 100svh;
+  padding: max(28px, env(safe-area-inset-top)) clamp(14px, 4vw, 24px) max(40px, env(safe-area-inset-bottom));
+  background: radial-gradient(ellipse at 54% 35%, #0b1b2c, #060b12 63%, #030609);
+}
+.admin-landing main::before, .admin-landing main::after {
+  position: absolute;
+  z-index: -1;
+  width: 95%;
+  height: 24%;
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+.admin-landing main::before {
+  top: -12%; left: -22%; rotate: -27deg;
+  border-bottom: 2px solid #37ccff;
+  box-shadow: 0 13px 28px #0079d480, 0 30px 0 #102c48a6;
+}
+.admin-landing main::after {
+  bottom: -14%; right: -25%; rotate: -20deg;
+  border-top: 2px solid #51d5ff;
+  box-shadow: 0 -12px 26px #008bd766, 0 -29px 0 #102c48a6;
+}
+.admin-landing-brand { padding: clamp(22px, 6vh, 54px) 0 clamp(32px, 6vh, 62px); }
+.admin-landing-emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(90px, 26vw, 144px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: radial-gradient(circle at 33% 23%, #d2dce3, #526573 19%, #171d25 37%, #010207 65%);
+  box-shadow: 0 -2px 0 #a1f2ff, 0 12px 28px #0009;
+}
+.admin-landing-emblem::after {
+  position: absolute;
+  inset: 29% -16% 11%;
+  border-radius: 50%;
+  border-bottom: 5px solid #52ddff;
+  rotate: -26deg;
+  content: "";
+}
+.admin-landing-emblem span {
+  display: grid;
+  place-items: center;
+  width: 51%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 24%, white, #ced9e4 68%, #71899e);
+  color: #060a10;
+  font-size: clamp(2rem, 9vw, 3.6rem);
+  line-height: 1;
+  font-weight: 900;
+}
+.admin-landing-brand h1 { margin-top: 19px; font-style: italic; font-weight: 850; }
+.admin-landing-brand p { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.admin-landing-brand p::before, .admin-landing-brand p::after { content: ""; width: 30px; height: 1px; background: #768b9d; }
+.admin-landing nav { gap: 14px; }
+.admin-landing nav a {
+  min-height: clamp(74px, 13vh, 120px);
+  grid-template-columns: clamp(48px, 13vw, 86px) minmax(0, 1fr) 20px;
+  padding: 12px clamp(12px, 4vw, 25px);
+  border-color: #354050;
+  background: linear-gradient(150deg, #18212b, #0d131b 70%);
+}
+.admin-landing .action-icon { min-height: 46px; }
+.admin-landing .action-icon svg { width: clamp(30px, 9vw, 54px); height: auto; }
+.admin-landing nav a.camera-entry {
+  border-color: #8ce6ff;
+  background: linear-gradient(150deg, #0d3a53, #061725 67%);
+  box-shadow: inset 0 0 14px #46c7ff56, 0 0 16px #35c6ff4d;
+}
 .admin-camera-console .camera-console-back {
   display: inline-flex;
   align-items: center;
@@ -62,3 +142,8 @@
 @media (max-width: 680px) {
   .admin-camera-console .production-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+.admin-camera-console .production-heading h2 { color: #f5f8fc; font-size: clamp(1.35rem, 4.5vw, 2rem); }
+.admin-camera-console #productionPanel .production-camera { background: #080e17; }
+.admin-camera-console .production-preview { border: 1px solid #4a6579; background: #04070b; }
+#admin-tv .broadcast-gate-toggle { background: #91e4ff; color: #06141c; font-weight: 750; }
