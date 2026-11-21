@@ -409,3 +409,22 @@ body.tv-directe-body.results-tv-embed .tv-video {
   .results-bottom-nav a { font-size: 1rem; }
   .results-bottom-nav svg { width: 27px; height: 27px; }
 }
+
+.results-tv-grid > .results-tv-wordmark {
+  display: none;
+}
+@media (max-width: 760px) {
+  .results-redesign:not(.results-large) > .results-header {
+    display: none !important;
+  }
+  .results-redesign:not(.results-large) > main {
+    margin-block-start: 0;
+    padding-top: calc(5px + env(safe-area-inset-top)) !important;
+  }
+  .results-redesign:not(.results-large) .results-tv-grid > .results-tv-wordmark {
+    display: flex;
+    padding-block: 5px;
+    letter-spacing: .13em;
+  }
+}
+
