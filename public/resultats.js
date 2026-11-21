@@ -64,7 +64,6 @@ function renderTvTables() {
     const video = card.querySelector(".results-tv-video");
     const frame = video.querySelector("iframe");
     const open = resultsState.settings?.publicBroadcast?.open === true;
-    video.querySelector("p").hidden = open;
     card.querySelector(".results-tv-status").textContent = open ? "En directe" : "Sense emissió";
     card.classList.toggle("broadcast-open", open);
     if (!open) {

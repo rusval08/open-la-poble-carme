@@ -135,7 +135,6 @@ body.tv-directe-body.results-tv-embed .tv-video {
 }
 .broadcast-open .results-tv-status { background: #b91916; color: #fff; }
 .results-redesign .results-tv-video { aspect-ratio: 2.5 / 1; }
-.results-redesign .results-tv-video p { font-size: .78rem; }
 .results-redesign .results-tv-score {
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto;
   padding: 1px 8px;
@@ -212,17 +211,13 @@ body.tv-directe-body.results-tv-embed .tv-video {
 .results-tv-status {
   border-radius: 3px;
 }
-.results-redesign .results-tv-video > p {
-  display: none;
-}
-#taula-1:not(.broadcast-open) .results-tv-video {
-  background: #080c0d url("/tv-table-1-carme.webp") center / cover no-repeat;
-}
-#taula-2:not(.broadcast-open) .results-tv-video {
-  background: #080c0d url("/tv-table-2-collage.webp") center / cover no-repeat;
-}
-.results-tv-card.broadcast-open .results-tv-video {
-  background: #080c0d;
+.results-tv-poster {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 .results-redesign .results-tv-score {
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
