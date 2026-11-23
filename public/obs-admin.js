@@ -1,8 +1,30 @@
-(() => {
+(async () => {
   'use strict';
 
-  if (window.parent !== window && new URLSearchParams(location.search).has('panel')) {
-    document.querySelector('#obs-back').hidden = true;
+  const cameraConsole = document.querySelector('.admin-camera-console');
+  let controls = document;
+  if (cameraConsole) {
+    const connectionPanel = document.createElement('div');
+    connectionPanel.className = 'obs-connection-panel';
+    const title = document.createElement('h3');
+    title.textContent = 'Connexió d’OBS Studio';
+    connectionPanel.append(title);
+    cameraConsole.querySelector('.camera-console-title').after(connectionPanel);
+    try {
+      const response = await fetch('/obs-admin.html');
+      if (!response.ok) throw new Error();
+      controls = new DOMParser().parseFromString(await response.text(), 'text/html');
+      const connection = controls.querySelector('#obs-connection');
+      const status = controls.querySelector('#obs-status');
+      if (!connection || !status || !controls.querySelector('#obs-table-template')) throw new Error();
+      connectionPanel.append(document.importNode(connection, true), document.importNode(status, true));
+    } catch {
+      const error = document.createElement('p');
+      error.setAttribute('role', 'status');
+      error.textContent = 'No s’han pogut carregar els controls d’OBS. Recarrega la pàgina o torna a iniciar sessió.';
+      connectionPanel.append(error);
+      return;
+    }
   }
 
   const form = document.querySelector('#obs-connection');
@@ -17,9 +39,18 @@
   let scheduledPreview;
 
   const tables = [1, 2].map(number => {
-    const section = document.querySelector('#obs-table-template').content.firstElementChild.cloneNode(true);
-    section.querySelector('h2').textContent = `TV Table ${number}`;
-    document.querySelector('#obs-tables').append(section);
+    const section = document.importNode(controls.querySelector('#obs-table-template').content.firstElementChild, true);
+    const heading = section.querySelector('h2');
+    if (cameraConsole) {
+      const label = document.createElement('h4');
+      label.textContent = 'OBS Studio';
+      heading.replaceWith(label);
+      section.className = 'obs-camera-controls';
+      cameraConsole.querySelector(`.production-camera[data-table="${number}"]`).append(section);
+    } else {
+      heading.textContent = `TV Table ${number}`;
+      document.querySelector('#obs-tables').append(section);
+    }
     const image = section.querySelector('img');
     image.alt = `Previsualització OBS de la TV Table ${number}`;
     return {
