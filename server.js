@@ -1311,7 +1311,7 @@ function serveStatic(req, res) {
         html = html.replace("<h1>Emissió encara no oberta</h1>", `<h1>TV Table ${selectedTv}</h1>`)
           .replace("Estem preparant les TV Table.", "L’emissió d’aquesta taula encara no està oberta.");
       }
-      html = html.replace('</head>', '<link rel="stylesheet" href="/graphite-theme.css?v=1"></head>');
+      html = html.replace('</head>', '<link rel="stylesheet" href="/graphite-theme.css?v=2"></head>');
       res.end(html)}else res.end(content);
   });
 }
