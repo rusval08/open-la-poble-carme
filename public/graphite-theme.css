@@ -1,0 +1,86 @@
+:root {
+  --graphite-page: #101214;
+  --graphite-panel: #191c20;
+  --graphite-raised: #24282d;
+  --graphite-border: #54595f;
+  --graphite-silver: #c2c6ca;
+  --graphite-text: #f0f1f2;
+}
+
+html body:not(.obs-body, .obs-safe-body, .results-tv-embed, .tv-immersive) {
+  background: var(--graphite-page) !important;
+  color: var(--graphite-text);
+}
+
+html body :is(.results-header, .admin-header, .admin-landing-brand, .live-header, .topbar, .results-bottom-nav) {
+  background: var(--graphite-panel) !important;
+  border-color: var(--graphite-border) !important;
+}
+
+html body:not(.results-tv-embed, .tv-immersive) :is(
+  .results-tv-card, .results-sponsors, .results-info-panel, .result-card,
+  .live-now-card, .live-scroll-card, .stats-table-card, .stats-summary article,
+  .tv-camera-card, .broadcast-hold-card, .big-screen-hero, .public-link-card,
+  .recordings-intro, .recordings-row, .login-card, .bulk-panel,
+  .admin-section, .control-panel, .production-camera, .obs-connection-panel,
+  .admin-landing nav > a, .bracket-legend, .manual-bracket-shell,
+  .quadrant-grid-card, .obs-grid > section
+) {
+  background: var(--graphite-panel) !important;
+  border: 1px solid var(--graphite-border) !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 0 0 1px #ffffff0b, 0 2px 5px #0004 !important;
+  color: var(--graphite-text);
+}
+
+html body:not(.results-tv-embed, .tv-immersive) :is(
+  .results-tv-video, .results-sponsors-poster, .tv-camera-card .tv-video,
+  .production-preview, .obs-preview
+) {
+  position: relative;
+  isolation: isolate;
+}
+
+html body:not(.results-tv-embed, .tv-immersive) :is(
+  .results-tv-video, .results-sponsors-poster, .tv-camera-card .tv-video,
+  .production-preview, .obs-preview
+)::after {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  inset: auto 9px 7px auto;
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--graphite-silver);
+  box-shadow: 0 1px 3px #0009;
+  pointer-events: none;
+}
+
+html body :is(
+  .results-tv-card > header, .result-title, .stats-table-head, .production-camera-header,
+  .camera-console-title, .obs-connection-panel, .results-tv-score
+) {
+  background: var(--graphite-raised) !important;
+  border-color: var(--graphite-border) !important;
+}
+
+html body :is(.public-switch-link, .admin-landing .action-icon, .results-large-link):not(:hover, :focus-visible) {
+  background: var(--graphite-raised) !important;
+  border-color: var(--graphite-border) !important;
+  color: var(--graphite-text) !important;
+}
+
+html body :is(.public-switch-link.active, .public-switch-link[aria-current="page"]) {
+  box-shadow: inset 0 -2px var(--graphite-silver);
+}
+
+html body :is(
+  .admin-section, .admin-landing nav > a, .login-card, .control-panel,
+  .results-info-panel, .stats-table-card, .broadcast-hold-card, .recordings-intro
+) {
+  background-image: linear-gradient(var(--graphite-silver), var(--graphite-silver)) !important;
+  background-size: 20px 2px !important;
+  background-position: right 9px bottom 7px !important;
+  background-repeat: no-repeat !important;
+}
