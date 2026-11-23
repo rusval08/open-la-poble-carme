@@ -292,3 +292,26 @@ html body.admin-body .production-camera button[aria-pressed="true"] {
   outline: 1px solid #ff5361;
   outline-offset: -1px;
 }
+
+@media (max-width: 719px) {
+  html body.results-redesign:not(.results-large) .results-tv-grid > .results-tv-wordmark {
+    justify-content: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid #35363a;
+    font-size: clamp(1.15rem, 5.5vw, 1.7rem);
+    letter-spacing: .04em;
+  }
+
+  html body.results-redesign:not(.results-large) .results-tv-grid > .results-tv-wordmark::before,
+  html body.results-redesign:not(.results-large) .results-tv-grid > .results-tv-wordmark::after {
+    content: none;
+  }
+
+  html body.results-redesign:not(.results-large) #taula-1 .results-tv-video {
+    aspect-ratio: 16 / 10;
+  }
+
+  html body.results-redesign:not(.results-large) #taula-1 > header h3 {
+    font-size: 1.25rem;
+  }
+}
