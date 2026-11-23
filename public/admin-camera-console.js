@@ -3,6 +3,20 @@
   const consolePanel = document.querySelector('.admin-camera-console');
   if (!consolePanel) return;
 
+  const obsPanel = document.createElement('details');
+  obsPanel.className = 'camera-obs-panel';
+  const obsTitle = document.createElement('summary');
+  obsTitle.textContent = 'OBS Studio · TV Table 1 i 2';
+  obsPanel.append(obsTitle);
+  obsPanel.addEventListener('toggle', () => {
+    if (!obsPanel.open || obsPanel.querySelector('iframe')) return;
+    const frame = document.createElement('iframe');
+    frame.title = 'Control d’OBS Studio per a les dues TV Table';
+    frame.src = '/obs-admin.html?panel=1';
+    obsPanel.append(frame);
+  });
+  consolePanel.querySelector('.camera-console-title').after(obsPanel);
+
   const cards = new Map();
   let publicOpen = false;
 

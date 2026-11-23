@@ -278,7 +278,7 @@ function sendUnauthorized(res) {
   sendJson(res, 401, { error: "Cal iniciar sessió com administrador" });
 }
 function isAdminProtectedPage(urlPath) {
-  return ["/admin.html", "/admin-home.html", "/quadrant-admin.html", "/jugadors.html", "/gravacions.html"].includes(
+  return ["/admin.html", "/admin-home.html", "/obs-admin.html", "/quadrant-admin.html", "/jugadors.html", "/gravacions.html"].includes(
     urlPath,
   );
 }

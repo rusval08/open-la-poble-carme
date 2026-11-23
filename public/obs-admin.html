@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OBS Studio · Carme 8 Pool</title>
+  <link rel="stylesheet" href="/obs-admin.css">
+  <script src="/obs-admin.js" defer></script>
+</head>
+<body>
+  <main>
+    <a id="obs-back" href="/admin.html#admin-tv">← Control de càmeres</a>
+    <h1>OBS Studio</h1>
+    <form id="obs-connection">
+      <p>Obre aquest panell al PC d’OBS. A OBS Studio, activa el servidor a Eines → Configuració del servidor WebSocket i mantén activada l’autenticació.</p>
+      <label>Port WebSocket <input name="port" type="number" min="1" max="65535" value="4455" required></label>
+      <label>Contrasenya d’OBS <input name="password" type="password" required autocomplete="off"></label>
+      <button type="submit">Connecta OBS</button>
+      <button type="button" id="obs-disconnect" disabled>Desconnecta</button>
+    </form>
+    <p id="obs-status" role="status">OBS desconnectat</p>
+    <div id="obs-tables" class="obs-grid"></div>
+    <template id="obs-table-template">
+      <section>
+        <h2></h2>
+        <div class="obs-preview"><img hidden></div>
+        <label>Escena <select data-scene></select></label>
+        <label>Pantalla connectada a OBS <select data-monitor></select></label>
+        <button type="button" data-project>Projecta a pantalla completa</button>
+        <button type="button" data-program>Envia al programa d’OBS</button>
+        <p data-table-status role="status"></p>
+      </section>
+    </template>
+  </main>
+</body>
+</html>

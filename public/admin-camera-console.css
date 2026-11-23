@@ -79,3 +79,17 @@
   .admin-camera-console .usb-zoom > div { grid-template-columns: 1fr 1fr; }
   .admin-camera-console .usb-zoom output { grid-row: 1; grid-column: 1 / -1; text-align: center; }
 }
+
+.camera-obs-panel {
+  margin-block: 12px;
+  border: 1px solid var(--camera-edge);
+  border-radius: 10px;
+}
+.camera-obs-panel summary { padding: 12px; cursor: pointer; }
+.camera-obs-panel iframe {
+  display: block;
+  width: 100%;
+  height: min(850px, 80dvh);
+  min-height: 420px;
+  border: 0;
+}

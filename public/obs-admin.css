@@ -1,0 +1,14 @@
+:root { color-scheme: dark; font: 16px system-ui, sans-serif; color: #f2f6fa; background: #0b1016; }
+body { margin: 0; }
+main { width: min(1100px, calc(100% - 32px)); margin: 24px auto; }
+a { color: #59e3e9; }
+form, section { background: #17212b; border: 1px solid #43515e; border-radius: 12px; padding: 16px; }
+form p { margin-top: 0; }
+form label { display: inline-grid; margin-right: 8px; }
+label { display: grid; gap: 5px; margin: 8px 0; }
+button, input, select { font: inherit; color: inherit; background: #101821; border: 1px solid #738899; border-radius: 7px; padding: 9px; min-height: 24px; }
+button { cursor: pointer; margin: 4px 4px 4px 0; }
+button:disabled { opacity: .55; cursor: default; }
+.obs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 390px), 1fr)); gap: 16px; }
+.obs-preview { background: #070c11; aspect-ratio: 16 / 9; }
+.obs-preview img { width: 100%; height: 100%; object-fit: contain; }
