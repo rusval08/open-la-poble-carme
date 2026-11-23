@@ -11,7 +11,7 @@
     connectionPanel.append(title);
     cameraConsole.querySelector('.camera-console-title').after(connectionPanel);
     try {
-      const response = await fetch('/obs-admin.html');
+      const response = await fetch('/obs-admin.html?v=obs-framing', { cache: 'no-store' });
       if (!response.ok) throw new Error();
       controls = new DOMParser().parseFromString(await response.text(), 'text/html');
       const connection = controls.querySelector('#obs-connection');
@@ -32,6 +32,8 @@
   const disconnect = document.querySelector('#obs-disconnect');
   const status = document.querySelector('#obs-status');
   const pending = new Map();
+  const originalFraming = new Map();
+  const adjusting = new Set();
   let socket;
   let connected = false;
   let nextRequest = 0;
@@ -56,6 +58,8 @@
     return {
       number, image,
       scene: section.querySelector('[data-scene]'),
+      source: section.querySelector('[data-source]'),
+      framing: Array.from(section.querySelectorAll('[data-adjust]')),
       monitor: section.querySelector('[data-monitor]'),
       project: section.querySelector('[data-project]'),
       program: section.querySelector('[data-program]'),
@@ -63,11 +67,21 @@
     };
   });
 
+  function sourceKey(scene, item) {
+    return JSON.stringify([scene, item]);
+  }
+
   function updateButtons() {
     connect.disabled = Boolean(socket);
     disconnect.disabled = !socket;
     for (const table of tables) {
       table.scene.disabled = !connected;
+      table.source.disabled = !connected || !table.scene.value;
+      const key = sourceKey(table.scene.value, table.source.value);
+      for (const button of table.framing) {
+        button.disabled = !connected || !table.source.value || adjusting.has(key)
+          || (button.dataset.adjust === 'reset' && !originalFraming.has(key));
+      }
       table.monitor.disabled = !connected;
       table.project.disabled = !connected || !table.scene.value || !table.monitor.value;
       table.program.disabled = !connected || !table.scene.value || table.scene.value === program;
@@ -108,8 +122,76 @@
     if (socket !== activeSocket) return;
     program = data.currentProgramSceneName;
     const entries = data.scenes.map(({ sceneName }) => [sceneName, sceneName]);
-    for (const table of tables) populate(table.scene, entries, 'Tria una escena', `TV Table ${table.number}`);
+    await Promise.all(tables.map(table => {
+      const previous = table.scene.value;
+      populate(table.scene, entries, 'Tria una escena', `TV Table ${table.number}`);
+      return refreshSources(table, previous === table.scene.value);
+    }));
     updateButtons();
+  }
+
+  async function refreshSources(table, preserveSelection = false) {
+    const sceneName = table.scene.value;
+    const activeSocket = socket;
+    const previous = preserveSelection ? table.source.value : '';
+    populate(table.source, [], 'Tria la font de càmera');
+    updateButtons();
+    if (!sceneName) return;
+    try {
+      const { sceneItems } = await request('GetSceneItemList', { sceneName });
+      if (socket !== activeSocket || table.scene.value !== sceneName) return;
+      const inputs = sceneItems
+        .filter(item => item.inputKind && !item.isGroup)
+        .map(item => [item.sourceName, item.sceneItemId]);
+      populate(table.source, inputs, 'Tria la font de càmera', previous);
+      updateButtons();
+    } catch (error) {
+      if (socket === activeSocket && table.scene.value === sceneName) {
+        table.status.textContent = error.message;
+      }
+    }
+  }
+
+  const pan = { left: [-16, 0], right: [16, 0], up: [0, -16], down: [0, 16] };
+
+  function framingFields(transform) {
+    const { positionX, positionY, scaleX, scaleY, boundsType, boundsWidth, boundsHeight } = transform;
+    const size = boundsType === 'OBS_BOUNDS_NONE' ? { scaleX, scaleY } : { boundsWidth, boundsHeight };
+    return { positionX, positionY, ...size };
+  }
+
+  async function adjustFraming(table, action) {
+    const sceneName = table.scene.value;
+    const item = table.source.value;
+    const key = sourceKey(sceneName, item);
+    if (!connected || !sceneName || !item || adjusting.has(key)) return;
+    const target = { sceneName, sceneItemId: Number(item) };
+    adjusting.add(key);
+    updateButtons();
+    try {
+      const { sceneItemTransform } = await request('GetSceneItemTransform', target);
+      const current = framingFields(sceneItemTransform);
+      if (!originalFraming.has(key)) originalFraming.set(key, current);
+      let changes;
+      if (action === 'reset') {
+        changes = originalFraming.get(key);
+      } else if (pan[action]) {
+        const [x, y] = pan[action];
+        changes = { positionX: current.positionX + x, positionY: current.positionY + y };
+      } else {
+        const factor = action === 'in' ? 1.1 : 1 / 1.1;
+        changes = Object.fromEntries(Object.entries(current)
+          .filter(([name]) => name !== 'positionX' && name !== 'positionY')
+          .map(([name, value]) => [name, value * factor]));
+      }
+      await request('SetSceneItemTransform', { ...target, sceneItemTransform: changes });
+      table.status.textContent = action === 'reset' ? 'Enquadrament restablert a OBS.' : 'Enquadrament actualitzat a OBS.';
+    } catch (error) {
+      table.status.textContent = error.message;
+    } finally {
+      adjusting.delete(key);
+      updateButtons();
+    }
   }
 
   async function preview(activeSocket) {
@@ -212,6 +294,7 @@
       socket = null;
       connected = false;
       program = '';
+      originalFraming.clear();
       for (const table of tables) table.image.hidden = true;
       updateButtons();
     });
@@ -224,8 +307,12 @@
     table.scene.addEventListener('change', () => {
       table.image.hidden = true;
       table.status.textContent = '';
-      updateButtons();
+      refreshSources(table);
     });
+    table.source.addEventListener('change', updateButtons);
+    for (const button of table.framing) {
+      button.addEventListener('click', () => adjustFraming(table, button.dataset.adjust));
+    }
     table.monitor.addEventListener('change', updateButtons);
     async function send(button, type, data, success) {
       button.disabled = true;
