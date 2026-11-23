@@ -465,3 +465,55 @@ html body.results-redesign .results-sponsors.has-sponsor-list .results-sponsor-s
     display: none;
   }
 }
+
+/* Use the two table views from the selected mockup as the offline posters. */
+html body.results-redesign:not(.results-large) .results-tv-video:not(:has(iframe))::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background-image: url("/option-three-reference.webp");
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+html body.results-redesign:not(.results-large) #taula-1 .results-tv-video::before {
+  background-size: 331.034% 336.842%;
+  background-position: 2.425% 88.056%;
+}
+
+html body.results-redesign:not(.results-large) #taula-2 .results-tv-video::before {
+  background-size: 619.355% 819.2%;
+  background-position: 38.975% 70.523%;
+}
+
+html body.results-redesign:not(.results-large) .results-tv-card:not(:has(iframe, .results-tv-score:not([hidden]))) > header {
+  padding: 28px 10px 7px;
+}
+
+html body.results-redesign:not(.results-large) .results-sponsors.has-sponsor-list {
+  min-height: 0;
+  height: auto;
+  align-content: center;
+  grid-template-rows: auto auto auto;
+}
+
+html body.results-redesign:not(.results-large) .results-sponsor-list {
+  max-height: 168px;
+}
+
+@media (min-width: 720px) {
+  html body.results-redesign:not(.results-large) .results-tv-grid {
+    grid-template-columns: minmax(0, 1.87fr) minmax(0, 1fr);
+    grid-template-rows: max-content minmax(0, 1fr);
+    gap: clamp(10px, 1.2vw, 18px);
+  }
+
+  html body.results-redesign:not(.results-large) #taula-1 .results-tv-video {
+    aspect-ratio: 464 / 362;
+  }
+
+  html body.results-redesign:not(.results-large) #taula-2 .results-tv-video {
+    aspect-ratio: 248 / 172;
+  }
+}
