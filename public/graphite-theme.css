@@ -529,3 +529,93 @@ html body.results-redesign:not(.results-large) .results-sponsors > a {
   border-radius: 0;
   flex: 0 0 auto;
 }
+
+html body.results-redesign:not(.results-large) .results-bottom-nav {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+html body.results-redesign:not(.results-large) .results-tv-grid .results-tv-card .results-tv-video {
+  flex: none;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+html body.results-redesign:not(.results-large) .results-tv-grid > .results-tv-card {
+  align-self: start;
+  grid-column: auto;
+  grid-row: auto;
+}
+
+html body.results-redesign:not(.results-large) .results-tv-card:not(.broadcast-open) .results-tv-video iframe {
+  opacity: 0;
+  pointer-events: none;
+}
+
+html body.results-redesign:not(.results-large) .results-tv-card:not(.broadcast-open) .results-tv-video::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background-image: url("/option-three-reference.webp");
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+html body.results-redesign:not(.results-large) .results-tv-card:not(:has(.results-tv-score:not([hidden]))) > header {
+  position: absolute;
+  z-index: 6;
+  inset: auto 1px 1px;
+  padding: 28px 10px 7px;
+  background: linear-gradient(transparent, #000d) !important;
+}
+
+html body.results-redesign .results-tv-card.broadcast-open .results-tv-video {
+  animation: tv-broadcast-start-border .65s ease-in-out 3;
+}
+
+html body.results-redesign .results-tv-card.broadcast-open .results-tv-status {
+  background: #b91916;
+  color: #fff;
+  animation: tv-broadcast-start-label .65s ease-in-out 3;
+}
+
+@keyframes tv-broadcast-start-border {
+  50% { border-color: #ff3547; }
+}
+
+@keyframes tv-broadcast-start-label {
+  50% { opacity: .25; }
+}
+
+@media (min-width: 720px) {
+  html body.results-redesign:not(.results-large) .results-tv-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+  }
+
+  html body.results-redesign:not(.results-large) .results-tv-grid > .results-sponsors {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body.results-redesign .results-tv-card.broadcast-open :is(.results-tv-video, .results-tv-status) {
+    animation: none;
+  }
+
+  html body.results-redesign .results-tv-card.broadcast-open .results-tv-video {
+    border-color: #ff3547;
+  }
+}
+
+@media (min-width: 720px) {
+  html body.results-redesign:not(.results-large) .results-tv-grid > :is(#taula-1, #taula-2) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+html body.results-redesign:not(.results-large) :is(#taula-1, #taula-2) .results-tv-video {
+  flex: none;
+  aspect-ratio: 16 / 9;
+}

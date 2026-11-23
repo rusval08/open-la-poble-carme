@@ -72,10 +72,9 @@ function renderTvTables() {
     const video = card.querySelector(".results-tv-video");
     const frame = video.querySelector("iframe");
     const open = resultsState.settings?.publicBroadcast?.open === true;
-    card.querySelector(".results-tv-status").textContent = open ? "En directe" : "Sense emissió";
-    card.classList.toggle("broadcast-open", open);
     if (!open) {
       frame?.remove();
+      setTableLive(card, false);
     } else if (!frame) {
       const player = document.createElement("iframe");
       player.title = `Emissió de TV Table ${number}`;
@@ -84,6 +83,24 @@ function renderTvTables() {
       player.src = `/tv-directe.html?taula=${number}&embed=1`;
       video.append(player);
     }
+  }
+}
+
+function setTableLive(card, live) {
+  if (card.classList.contains("broadcast-open") === live) return;
+  card.classList.toggle("broadcast-open", live);
+  card.querySelector(".results-tv-status").textContent = live ? "En directe" : "Sense emissió";
+}
+
+function refreshTableLiveStatus() {
+  for (const card of tvCards) {
+    const player = card.querySelector(".results-tv-video iframe");
+    const frameDocument = player?.contentDocument;
+    const video = frameDocument?.querySelector(".tv-video-container video");
+    const live = player?.contentWindow?.CPoolBroadcastAllowed === true &&
+      Boolean(video && video.readyState >= 2 && video.videoWidth > 0 &&
+        !video.ended && video.dataset.reconnecting !== "true");
+    setTableLive(card, live);
   }
 }
 
@@ -193,6 +210,7 @@ async function refreshResults() {
 function initResults() {
   const refresh = () => refreshResults().catch(() => {});
   setInterval(refresh, 2000);
+  if (!largeResults && tvCards.length) setInterval(refreshTableLiveStatus, 1000);
   refresh();
   const events = new EventSource("/api/events");
   events.onmessage = (event) => {
