@@ -517,3 +517,15 @@ html body.results-redesign:not(.results-large) .results-sponsor-list {
     aspect-ratio: 248 / 172;
   }
 }
+
+html body.results-redesign:not(.results-large) .results-sponsors {
+  align-self: stretch;
+  justify-content: center;
+  min-height: 0;
+  background: #191a1d !important;
+}
+
+html body.results-redesign:not(.results-large) .results-sponsors > a {
+  border-radius: 0;
+  flex: 0 0 auto;
+}
