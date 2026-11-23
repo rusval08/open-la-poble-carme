@@ -205,8 +205,90 @@ html body.results-large .results-sponsors {
   display: none;
 }
 
-@media (min-width: 850px) {
+/* Public broadcast layout, with the primary table beside the secondary feed. */
+html body.results-redesign {
+  --graphite-page: #0d0e10;
+  --graphite-panel: #161719;
+  --graphite-raised: #202124;
+  background: var(--graphite-page) !important;
+}
+
+html body.results-redesign:not(.results-large) .results-tv-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(8px, 1vw, 16px);
+}
+
+html body.results-redesign:not(.results-large) .results-tv-grid .results-tv-video {
+  height: auto;
+}
+
+html body.results-redesign:not(.results-large) .results-tv-card {
+  position: relative;
+}
+
+html body.results-redesign:not(.results-large) .results-tv-card:not(:has(iframe, .results-tv-score:not([hidden]))) > header {
+  position: absolute;
+  z-index: 6;
+  inset: auto 1px 1px;
+  padding: 20px 10px 5px;
+  background: linear-gradient(transparent, #000d) !important;
+}
+
+html body.results-redesign:not(.results-large) .results-tv-card > header h3 {
+  font-size: clamp(.95rem, 1.5vw, 1.4rem);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+html body.results-redesign .results-tv-card > header a {
+  color: var(--graphite-text);
+}
+
+html body.results-redesign:not(.results-large) .results-tv-video::after,
+html body.results-redesign:not(.results-large) .results-sponsors > a::after {
+  content: none;
+}
+
+html body.results-redesign .results-other,
+html body.results-redesign .results-other > h3 {
+  background: var(--graphite-panel) !important;
+  border-color: var(--graphite-border) !important;
+  color: var(--graphite-text);
+}
+
+@media (min-width: 720px) {
   html body.results-redesign:not(.results-large) .results-tv-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
   }
+
+  html body.results-redesign:not(.results-large) .results-tv-grid > #taula-1 {
+    grid-column: 1;
+    grid-row: span 2;
+  }
+
+  html body.results-redesign:not(.results-large) .results-tv-grid > :is(#taula-2, .results-sponsors) {
+    grid-column: 2;
+  }
+
+  html body.results-redesign:not(.results-large) #taula-1 .results-tv-video {
+    flex: 1;
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@media (min-width: 1200px) {
+  html body.admin-body .admin-camera-console #productionPanel .production-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+html body.admin-body :is(.production-camera, .production-preview, .obs-preview),
+html body.bracket-body .bracket-legend {
+  border-radius: 0 !important;
+}
+
+html body.admin-body .production-camera button[aria-pressed="true"] {
+  outline: 1px solid #ff5361;
+  outline-offset: -1px;
 }
