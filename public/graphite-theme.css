@@ -315,3 +315,139 @@ html body.admin-body .production-camera button[aria-pressed="true"] {
     font-size: 1.25rem;
   }
 }
+
+/* Option 3 masthead and sponsor stack. */
+html body.results-redesign:not(.results-large) {
+  background: #0d0e10 !important;
+}
+
+html body.results-redesign:not(.results-large) > .results-header {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  padding: 14px clamp(12px, 2.4vw, 34px) !important;
+  min-height: 0;
+  background: #0d0e10 !important;
+  border-bottom: 1px solid #303135;
+}
+
+html body.results-redesign .results-header .results-wordmark {
+  font: 800 clamp(1.4rem, 3vw, 2.2rem)/1.1 system-ui, sans-serif;
+  letter-spacing: -.04em;
+  color: #fff;
+}
+
+html body.results-redesign .results-header .results-wordmark::before,
+html body.results-redesign .results-header .results-wordmark::after {
+  content: none;
+}
+
+.broadcast-main-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px clamp(10px, 2vw, 26px);
+}
+
+.broadcast-main-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  color: #eee;
+  text-decoration: none;
+  font: 650 .87rem/1.2 system-ui, sans-serif;
+  border-bottom: 1px solid transparent;
+}
+
+.broadcast-main-nav a[aria-current],
+.broadcast-main-nav a:hover {
+  border-bottom-color: currentColor;
+}
+
+html body.results-redesign:not(.results-large) > main {
+  padding-top: clamp(12px, 2vw, 30px) !important;
+  background: #0d0e10;
+}
+
+html body.results-redesign:not(.results-large) .results-tv-grid > .results-tv-wordmark {
+  display: none;
+}
+
+html body.results-redesign:not(.results-large) .results-tv-card .results-tv-video,
+html body.results-redesign:not(.results-large) .results-sponsors {
+  border-radius: 0 !important;
+}
+
+html body.results-redesign:not(.results-large) .results-tv-card > header h3 {
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  font-weight: 800;
+}
+
+html body.results-redesign .results-sponsors.has-sponsor-list {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 176px;
+  height: 100%;
+  padding: 8px 12px;
+  background: #191a1d !important;
+  border: 1px solid #2f3034 !important;
+}
+
+html body.results-redesign .results-sponsors.has-sponsor-list > a {
+  order: 1;
+  aspect-ratio: auto;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  color: #f2f2f3;
+  text-decoration: underline;
+  padding: 7px 0 0;
+  font-size: .76rem;
+}
+
+.results-sponsors.has-sponsor-list > a .results-sponsors-poster {
+  display: none;
+}
+
+.results-sponsor-strip {
+  min-height: 0;
+}
+
+.results-sponsor-list {
+  display: block;
+  list-style: none;
+  max-height: 174px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+
+.results-sponsor-list li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  border-bottom: 1px solid #3a3b3d;
+}
+
+.results-sponsor-list .sponsor-ticker-logo {
+  --logo-height: 30px;
+  border-radius: 0;
+}
+
+html body.results-large .results-sponsors.has-sponsor-list {
+  display: none;
+}
+
+@media (min-width: 720px) {
+  html body.results-redesign:not(.results-large) #taula-1 .results-tv-video {
+    aspect-ratio: 5 / 4;
+  }
+
+  html body.results-redesign:not(.results-large) #taula-2 .results-tv-video {
+    aspect-ratio: 16 / 10;
+  }
+}
