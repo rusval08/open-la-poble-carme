@@ -588,3 +588,9 @@ html body.results-redesign:not(.results-large) :is(#taula-1, #taula-2) .results-
   flex: none;
   aspect-ratio: 16 / 9;
 }
+
+/* Preserve the whole tournament collage inside the TV Table 2 frame. */
+html body.results-redesign #taula-2 .results-tv-poster {
+  object-fit: contain;
+  object-position: center;
+}
